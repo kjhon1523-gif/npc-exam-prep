@@ -1970,12 +1970,18 @@ async function saveScore(email, score, total, percentage) {
     total_questions: total, percentage
   });
 }
+  async function saveScoreHistory(email, score, total, percentage) {
+  return await callBackend({
+    action: "saveScoreHistory", email, score,
+    total_questions: total, percentage
+  });
+}
 
   // Called automatically when a mock exam ends.
 // Sends score, total, and percentage to Google Sheet.
 async function finalizeMockScore() {
-  if (quizMode !== 'mock') return;   // only for mock exams
-  if (_mockSaved) return;            // don't double-save
+  if (quizMode !== 'mock') return;
+  if (_mockSaved) return;
   _mockSaved = true;
 
   const user = getSession();
@@ -1988,15 +1994,26 @@ async function finalizeMockScore() {
   const total = quizQuestions.length;
   const pct = total ? Math.round(correct / total * 100) : 0;
 
+  // Save latest score to main sheet (overwrites F/G/H)
   try {
     const res = await saveScore(user.email, correct, total, pct);
     if (res && res.result === "success") {
-      console.log("✓ Score saved → " + correct + "/" + total + " = " + pct + "%");
-    } else {
-      console.warn("Score save failed:", res);
+      console.log("✓ Latest score updated → " + correct + "/" + total + " = " + pct + "%");
     }
   } catch(e) {
-    console.error("Score save error:", e);
+    console.error("Latest score save failed:", e);
+  }
+
+  // Also append this exam to the "Scores" history sheet
+  try {
+    const hist = await saveScoreHistory(user.email, correct, total, pct);
+    if (hist && hist.result === "success") {
+      console.log("✓ History row added to Scores sheet");
+    } else {
+      console.warn("History save failed:", hist);
+    }
+  } catch(e) {
+    console.error("History save error:", e);
   }
 }
 async function upgradeToPaid(email, txnId) {
