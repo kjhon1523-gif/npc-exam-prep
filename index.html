@@ -144,6 +144,9 @@ header{position:sticky;top:0;z-index:100;height:var(--header-h);background:var(-
 .icon-btn{background:none;border:1.5px solid var(--border);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--text);transition:all .2s}
 .icon-btn:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
 
+/* ADMIN BADGE */
+.admin-badge{display:inline-block;font-size:.62rem;background:linear-gradient(135deg,#f4a261,#e76f51);color:#fff;padding:.12rem .45rem;border-radius:50px;font-weight:800;letter-spacing:.5px;margin-left:.35rem;vertical-align:middle}
+
 /* LAYOUT */
 .layout{display:flex;min-height:calc(100vh - var(--header-h))}
 aside{width:290px;background:var(--sidebar);color:#fff;padding:1.25rem 0;overflow-y:auto;flex-shrink:0;height:calc(100vh - var(--header-h));position:sticky;top:var(--header-h)}
@@ -379,13 +382,15 @@ h2{font-size:1.25rem;font-weight:700;color:var(--text);margin-bottom:1rem}
     <button class="icon-btn" onclick="openSettings()" title="Settings &amp; Export">⚙️</button>
     <button class="icon-btn" onclick="toggleTheme()" title="Toggle dark mode" id="themeBtn">🌙</button>
   </div>
+  <button class="icon-btn" id="authBtn" onclick="openAuthModal()" title="Login / Register">👤</button>
+  <span id="userLabel" style="font-size:.8rem;color:var(--text-light);margin-left:.3rem;"></span>
 </header>
 
 <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
 <div class="layout">
   <aside id="sidebar">
-    <h3>Study Sections <button onclick="addSectionPrompt()" title="Add new section">+</button></h3>
+    <h3>Study Sections <button id="addSectionBtn" onclick="addSectionPrompt()" title="Add new section">+</button></h3>
     <div id="sidebarNav"></div>
   </aside>
   <main id="mainContent"></main>
@@ -431,6 +436,7 @@ function saveData(){
   }
 }
 function resetToDataJs(){
+  if (!requireAdmin()) return;
   if (!confirm('Reset ALL content back to the original data.js? Your local edits will be lost.')) return;
   localStorage.removeItem(DATA_KEY);
   DATA = deepClone(SECTIONS);
@@ -487,6 +493,28 @@ async function pasteFromClipboard(){
 }
 
 /* ============================================================
+   ADMIN CONTROL
+   ============================================================ */
+// 👇 ADD YOUR ADMIN EMAILS HERE (lowercase). Must match the ones in Apps Script.
+const ADMIN_EMAILS = [
+  "rajeshchhetri@example.com"   // ← CHANGE TO YOUR REAL EMAIL
+];
+
+function isAdmin(user){
+  if (!user || !user.email) return false;
+  const email = user.email.toLowerCase().trim();
+  return ADMIN_EMAILS.some(a => a.toLowerCase().trim() === email);
+}
+
+function requireAdmin(){
+  if (!isAdmin(getSession())){
+    toast('Admin access required', true);
+    return false;
+  }
+  return true;
+}
+
+/* ============================================================
    MODAL SYSTEM
    ============================================================ */
 function openModal(html){
@@ -512,6 +540,28 @@ document.addEventListener('keydown', e => {
 document.getElementById('modal').addEventListener('click', e => {
   if (e.target.id === 'modal') closeModal();
 });
+
+/* ============================================================
+   PLAN / ACCESS CONTROL
+   ============================================================ */
+const FREE_QUESTION_LIMIT = 5;
+const FREE_MOCK_LIMIT     = 10;
+const PAID_MOCK_LIMIT     = 150;
+
+function isFreePlan(user){
+  return !user || user.plan !== 'paid';
+}
+
+function getVisibleQuestions(chapter, user){
+  const all = (chapter && chapter.questions) || [];
+  if (!isFreePlan(user)) return all;
+  return all.slice(0, FREE_QUESTION_LIMIT);
+}
+
+function handleUpgradeClick(){
+  if (getSession()) openProfileModal();
+  else openAuthModal();
+}
 
 /* ============================================================
    APP STATE
@@ -571,7 +621,13 @@ function toggleSidebar(){
   document.getElementById('overlay').classList.toggle('show');
 }
 function renderSidebar(){
+  const admin = isAdmin(getSession());
   const nav = document.getElementById('sidebarNav');
+
+  // Show/hide the "+" add section button in the header
+  const addBtn = document.getElementById('addSectionBtn');
+  if (addBtn) addBtn.style.display = admin ? 'flex' : 'none';
+
   nav.innerHTML = DATA.map(sec => `
     <div class="section-item" data-sid="${sec.id}">
       <div class="section-header" onclick="toggleSection('${sec.id}')">
@@ -579,20 +635,24 @@ function renderSidebar(){
         <span>${escapeHtml(sec.title)}</span>
         <span class="arrow">▶</span>
       </div>
+      ${admin ? `
       <div class="section-actions">
         <button onclick="event.stopPropagation();editSection('${sec.id}')" title="Edit section">✏️</button>
         <button onclick="event.stopPropagation();addChapterToSection('${sec.id}')" title="Add chapter">➕</button>
         <button onclick="event.stopPropagation();deleteSection('${sec.id}')" title="Delete section">🗑️</button>
       </div>
+      ` : ''}
       <div class="chapters">
         ${sec.chapters.map(ch => `
           <div class="chapter-link" data-cid="${ch.id}" onclick="openChapter('${sec.id}','${ch.id}')">
             <span>${escapeHtml(ch.title)}</span>
             <span class="qcount">(${ch.questions.length})</span>
+            ${admin ? `
             <div class="chapter-actions">
               <button onclick="event.stopPropagation();editChapter('${sec.id}','${ch.id}')" title="Edit">✏️</button>
               <button onclick="event.stopPropagation();deleteChapter('${sec.id}','${ch.id}')" title="Delete">🗑️</button>
             </div>
+            ` : ''}
           </div>
         `).join('')}
       </div>
@@ -658,6 +718,8 @@ function renderHome(){
     totalCorrect += p.correct.length;
   });
   const accuracy = totalAnswered ? Math.round(totalCorrect / totalAnswered * 100) : 0;
+  const isFree = isFreePlan(getSession());
+  const admin = isAdmin(getSession());
 
   return `
     <div class="hero">
@@ -670,14 +732,15 @@ function renderHome(){
         <div class="hero-stat"><strong>${accuracy}%</strong><span>Accuracy</span></div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="startMock()">🎯 Start Mock Exam</button>
+        <button class="btn btn-primary" onclick="startMock()">🎯 Start Mock Exam${isFree ? ' (10 Q)' : ' (150 Q)'}</button>
+        ${isFree ? `<button class="btn btn-secondary" onclick="openUpgradeModal()">⭐ Upgrade to Paid</button>` : ''}
         <button class="btn btn-secondary" onclick="continueWhereLeft()">📖 Continue Studying</button>
-        <button class="btn btn-outline" style="border-color:#fff;color:#fff" onclick="addSectionPrompt()">➕ Add Section</button>
+        ${admin ? `<button class="btn btn-outline" style="border-color:#fff;color:#fff" onclick="addSectionPrompt()">➕ Add Section</button>` : ''}
       </div>
     </div>
 
     <h2>Syllabus Sections</h2>
-    <p class="subtitle">Tap any section to open its first chapter. Hover over sections/chapters in the sidebar to edit, add, or delete.</p>
+    <p class="subtitle">Tap any section to open its first chapter.${admin ? ' As admin, hover over sections/chapters in the sidebar to edit, add, or delete.' : ''}</p>
     <div class="section-grid">
       ${DATA.map(sec => {
         const total = sec.chapters.reduce((s, c) => s + c.questions.length, 0);
@@ -707,7 +770,7 @@ function continueWhereLeft(){
       if (ch.questions.length > 0){ openChapter(sec.id, ch.id); return; }
     }
   }
-  toast('No questions available yet — add some first');
+  toast('No questions available yet');
 }
 
 /* ============================================================
@@ -728,24 +791,41 @@ function renderChapter(){
   const correct = p.correct.length;
   const pct = totalQ ? Math.round(answered / totalQ * 100) : 0;
 
+  const user = getSession();
+  const isFree = isFreePlan(user);
+  const admin = isAdmin(user);
+  const visibleCount = getVisibleQuestions(ch, user).length;
+
+  const banner = isFree ? `
+    <div class="help-box" style="background:var(--accent);color:#fff;border-left-color:#fff;">
+      ⚡ <strong>Free Plan:</strong> You can practice the first ${FREE_QUESTION_LIMIT} questions per chapter.
+      <button class="btn btn-sm" style="background:#fff;color:var(--accent);margin-left:.5rem;"
+        onclick="openUpgradeModal()">Upgrade →</button>
+    </div>
+  ` : "";
+
   let body = '';
   if (currentTab === 'notes'){
     body = ch.notes
       ? `<div class="notes">${ch.notes}</div>`
-      : `<div class="empty"><div class="em-icon">📝</div><p>No study notes yet. Click "Edit Notes" to add them.</p></div>`;
-  } else if (currentTab === 'manage'){
+      : `<div class="empty"><div class="em-icon">📝</div><p>No study notes yet.</p></div>`;
+  } else if (currentTab === 'manage' && admin){
     body = renderManageTab(sec, ch);
   } else {
     if (totalQ === 0){
       body = `<div class="empty"><div class="em-icon">📝</div><p>No practice questions yet.</p>
-        <button class="btn btn-primary" onclick="addQuestionToChapter('${sec.id}','${ch.id}')">➕ Add First Question</button></div>`;
+        ${admin ? `<button class="btn btn-primary" onclick="addQuestionToChapter('${sec.id}','${ch.id}')">➕ Add First Question</button>` : ''}</div>`;
     } else {
       body = `
         <div class="quiz-header">
           <div class="quiz-progress">Progress: <strong>${answered}/${totalQ}</strong> · Accuracy: <strong>${answered ? Math.round(correct / answered * 100) : 0}%</strong></div>
-          <button class="btn btn-primary" onclick="startPractice('${sec.id}','${ch.id}')">▶ Start Practice</button>
+          <button class="btn btn-primary" onclick="startPractice('${sec.id}','${ch.id}')">▶ Start Practice${isFree ? ` (${visibleCount})` : ''}</button>
         </div>
         <div class="progress-bar" style="height:8px"><div class="progress-fill" style="width:${pct}%"></div></div>
+        ${isFree ? `<p style="margin-top:.75rem;font-size:.8rem;color:var(--text-light)">
+          🔒 Free plan — practice is limited to the first <strong>${visibleCount}</strong> of ${totalQ} questions in this chapter.
+          <a href="javascript:void(0)" onclick="openUpgradeModal()" style="color:var(--primary);font-weight:600">Unlock all →</a>
+        </p>` : ''}
       `;
     }
   }
@@ -758,30 +838,38 @@ function renderChapter(){
     </div>
     <h1>${escapeHtml(ch.title)}</h1>
     <p class="subtitle">${escapeHtml(sec.title)} · ${totalQ} questions</p>
+    ${banner}
 
     <div class="chapter-toolbar">
-      <button class="btn btn-primary btn-sm" onclick="editNotes('${sec.id}','${ch.id}')">✏️ Edit Notes</button>
+      ${admin ? `
+        <button class="btn btn-primary btn-sm" onclick="editNotes('${sec.id}','${ch.id}')">✏️ Edit Notes</button>
+        <button class="btn btn-secondary btn-sm" onclick="addQuestionToChapter('${sec.id}','${ch.id}')">➕ Add Question</button>
+        <button class="btn btn-secondary btn-sm" onclick="bulkImportQuestions('${sec.id}','${ch.id}')">📥 Bulk Import</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteChapter('${sec.id}','${ch.id}')">🗑️ Delete Chapter</button>
+      ` : ''}
       <button class="btn btn-secondary btn-sm" onclick="copyChapterNotes('${sec.id}','${ch.id}')">📋 Copy Notes</button>
-      <button class="btn btn-secondary btn-sm" onclick="addQuestionToChapter('${sec.id}','${ch.id}')">➕ Add Question</button>
-      <button class="btn btn-secondary btn-sm" onclick="bulkImportQuestions('${sec.id}','${ch.id}')">📥 Bulk Import</button>
-      <button class="btn btn-danger btn-sm" onclick="deleteChapter('${sec.id}','${ch.id}')">🗑️ Delete Chapter</button>
     </div>
 
     <div class="tabs">
       <button class="tab ${currentTab === 'notes' ? 'active' : ''}" onclick="switchTab('notes')">📖 Study Notes</button>
       <button class="tab ${currentTab === 'practice' ? 'active' : ''}" onclick="switchTab('practice')">✏️ Practice (${totalQ})</button>
-      <button class="tab ${currentTab === 'manage' ? 'active' : ''}" onclick="switchTab('manage')">⚙️ Manage Questions (${totalQ})</button>
+      ${admin ? `<button class="tab ${currentTab === 'manage' ? 'active' : ''}" onclick="switchTab('manage')">⚙️ Manage Questions (${totalQ})</button>` : ''}
     </div>
 
     <div class="card">${body}</div>
   `;
 }
-function switchTab(t){ currentTab = t; render(); }
+function switchTab(t){
+  if (t === 'manage' && !requireAdmin()) return;
+  currentTab = t;
+  render();
+}
 
 /* ============================================================
-   MANAGE TAB
+   MANAGE TAB (admin only)
    ============================================================ */
 function renderManageTab(sec, ch){
+  if (!isAdmin(getSession())) return '<div class="empty">Admin access required</div>';
   const total = ch.questions.length;
   if (!total){
     return `
@@ -829,6 +917,7 @@ function renderManageTab(sec, ch){
 }
 
 function moveQuestion(sid, cid, idx, dir){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -840,6 +929,7 @@ function moveQuestion(sid, cid, idx, dir){
 }
 
 function duplicateQuestion(sid, cid, idx){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -852,6 +942,7 @@ function duplicateQuestion(sid, cid, idx){
 }
 
 function exportChapterQuestions(sid, cid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -882,9 +973,10 @@ function buildChapterQuestionsText(sid, cid){
 }
 
 /* ============================================================
-   EDIT NOTES
+   EDIT NOTES (admin only)
    ============================================================ */
 function editNotes(sid, cid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -944,6 +1036,7 @@ function previewNotes(){
   w.document.close();
 }
 function saveNotes(sid, cid){
+  if (!requireAdmin()) return;
   const ta = document.getElementById('notesEditor');
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
@@ -961,9 +1054,10 @@ function copyChapterNotes(sid, cid){
 }
 
 /* ============================================================
-   SECTION / CHAPTER CRUD
+   SECTION / CHAPTER CRUD (admin only)
    ============================================================ */
 function addSectionPrompt(){
+  if (!requireAdmin()) return;
   openModal(`
     <div class="modal-header">
       <h3>➕ Add New Section</h3>
@@ -985,6 +1079,7 @@ function addSectionPrompt(){
   setTimeout(() => document.getElementById('newSectionTitle')?.focus(), 100);
 }
 function saveNewSection(){
+  if (!requireAdmin()) return;
   const title = document.getElementById('newSectionTitle').value.trim();
   const icon = document.getElementById('newSectionIcon').value.trim() || '📘';
   if (!title){ toast('Enter a title', true); return; }
@@ -996,6 +1091,7 @@ function saveNewSection(){
   render();
 }
 function editSection(sid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   if (!sec) return;
   openModal(`
@@ -1018,6 +1114,7 @@ function editSection(sid){
   `);
 }
 function saveEditSection(sid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   if (!sec) return;
   sec.title = document.getElementById('editSectionTitle').value.trim() || sec.title;
@@ -1029,6 +1126,7 @@ function saveEditSection(sid){
   render();
 }
 function deleteSection(sid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   if (!sec) return;
   if (!confirm(`Delete section "${sec.title}" and all its chapters + questions? This cannot be undone.`)) return;
@@ -1046,6 +1144,7 @@ function deleteSection(sid){
 }
 
 function addChapterToSection(sid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   if (!sec) return;
   openModal(`
@@ -1065,6 +1164,7 @@ function addChapterToSection(sid){
   setTimeout(() => document.getElementById('newChapterTitle')?.focus(), 100);
 }
 function saveNewChapter(sid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const title = document.getElementById('newChapterTitle').value.trim();
   if (!sec || !title){ toast('Enter a title', true); return; }
@@ -1077,6 +1177,7 @@ function saveNewChapter(sid){
   openChapter(sid, newCh.id);
 }
 function editChapter(sid, cid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -1096,6 +1197,7 @@ function editChapter(sid, cid){
   `);
 }
 function saveEditChapter(sid, cid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -1107,6 +1209,7 @@ function saveEditChapter(sid, cid){
   render();
 }
 function deleteChapter(sid, cid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -1124,12 +1227,14 @@ function deleteChapter(sid, cid){
 }
 
 /* ============================================================
-   QUESTION CRUD
+   QUESTION CRUD (admin only)
    ============================================================ */
 function addQuestionToChapter(sid, cid){
+  if (!requireAdmin()) return;
   openQuestionEditor(sid, cid, -1);
 }
 function editQuestion(sid, cid, idx){
+  if (!requireAdmin()) return;
   openQuestionEditor(sid, cid, idx);
 }
 function openQuestionEditor(sid, cid, idx){
@@ -1230,6 +1335,7 @@ function selectAnswer(i){
   updateLivePreview();
 }
 function saveQuestion(sid, cid, idx, addAnother){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -1268,6 +1374,7 @@ function syncQuizQuestion(sid, cid, origIdx, newQ){
   });
 }
 function confirmDeleteQuestion(sid, cid, idx){
+  if (!requireAdmin()) return;
   if (!confirm('Delete this question?')) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
@@ -1285,9 +1392,10 @@ function confirmDeleteQuestion(sid, cid, idx){
 }
 
 /* ============================================================
-   BULK IMPORT
+   BULK IMPORT (admin only)
    ============================================================ */
 function bulkImportQuestions(sid, cid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -1324,6 +1432,7 @@ async function bulkPaste(){
   document.getElementById('bulkInput').value = text;
 }
 function processBulkImport(sid, cid){
+  if (!requireAdmin()) return;
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
@@ -1382,7 +1491,18 @@ function startPractice(sid, cid){
   const sec = DATA.find(s => s.id === sid);
   const ch = sec?.chapters.find(c => c.id === cid);
   if (!ch) return;
-  quizQuestions = ch.questions.map((q, i) => ({ ...q, _sectionId: sid, _chapterId: cid, _origIdx: i }));
+
+  const user = getSession();
+  const visible = getVisibleQuestions(ch, user);
+
+  if (visible.length === 0){
+    toast('No questions available for your plan', true);
+    return;
+  }
+
+  quizQuestions = visible.map((q, i) => ({
+    ...q, _sectionId: sid, _chapterId: cid, _origIdx: i
+  }));
   quizIndex = 0;
   quizAnswers = new Array(quizQuestions.length).fill(null);
   quizMode = 'practice';
@@ -1395,12 +1515,13 @@ function renderPractice(){
   const q = quizQuestions[quizIndex];
   const chosen = quizAnswers[quizIndex];
   const answered = chosen !== null;
+  const admin = isAdmin(getSession());
 
   return `
     <div class="quiz-header">
       <div class="quiz-progress">Question <strong>${quizIndex + 1}</strong> of <strong>${quizQuestions.length}</strong></div>
       <div style="display:flex;gap:.5rem">
-        <button class="btn btn-outline btn-sm" onclick="editQuestion('${q._sectionId}','${q._chapterId}',${q._origIdx})">✏️ Edit</button>
+        ${admin ? `<button class="btn btn-outline btn-sm" onclick="editQuestion('${q._sectionId}','${q._chapterId}',${q._origIdx})">✏️ Edit</button>` : ''}
         <button class="btn btn-outline btn-sm" onclick="navigate('chapter')">← Back</button>
       </div>
     </div>
@@ -1434,7 +1555,7 @@ function renderPractice(){
       </div>
     ` : ''}
 
-    <button class="float-add" title="Quick-add a question to this chapter" onclick="addQuestionToChapter('${q._sectionId}','${q._chapterId}')">+</button>
+    ${admin ? `<button class="float-add" title="Quick-add a question to this chapter" onclick="addQuestionToChapter('${q._sectionId}','${q._chapterId}')">+</button>` : ''}
   `;
 }
 function answerQuestion(i){
@@ -1473,6 +1594,9 @@ function renderPracticeResults(){
    MOCK EXAM
    ============================================================ */
 function startMock(numQuestions){
+  const user = getSession();
+  const maxQ = isFreePlan(user) ? FREE_MOCK_LIMIT : PAID_MOCK_LIMIT;
+
   const all = [];
   DATA.forEach(sec => sec.chapters.forEach(ch => {
     ch.questions.forEach((q, i) => all.push({ ...q, _sectionId: sec.id, _chapterId: ch.id, _origIdx: i }));
@@ -1483,7 +1607,8 @@ function startMock(numQuestions){
     const j = Math.floor(Math.random() * (i + 1));
     [all[i], all[j]] = [all[j], all[i]];
   }
-  const n = numQuestions || Math.min(150, all.length);
+  const requested = Number(numQuestions) || maxQ;
+  const n = Math.min(requested, maxQ, all.length);
   quizQuestions = all.slice(0, n);
   quizIndex = 0;
   quizAnswers = new Array(quizQuestions.length).fill(null);
@@ -1651,6 +1776,7 @@ function renderSearch(){
    SETTINGS MODAL
    ============================================================ */
 function openSettings(){
+  const admin = isAdmin(getSession());
   openModal(`
     <div class="modal-header">
       <h3>⚙️ Settings &amp; Data</h3>
@@ -1661,17 +1787,22 @@ function openSettings(){
       <code>data.js</code> file — replace the one in your project folder to make changes permanent across devices.
     </div>
     <div class="btn-row" style="flex-direction:column;align-items:stretch">
-      <button class="btn btn-primary" onclick="exportDataJs()">📤 Export data.js (Download)</button>
-      <button class="btn btn-secondary" onclick="copyDataJs()">📋 Copy data.js to Clipboard</button>
-      <button class="btn btn-secondary" onclick="exportProgressJson()">💾 Export Progress (JSON)</button>
-      <button class="btn btn-outline" onclick="importDataDialog()">📥 Import data.js or Backup</button>
-      <button class="btn btn-danger" onclick="resetToDataJs()">🔄 Reset to Original data.js</button>
+      ${admin ? `
+        <button class="btn btn-primary" onclick="exportDataJs()">📤 Export data.js (Download)</button>
+        <button class="btn btn-secondary" onclick="copyDataJs()">📋 Copy data.js to Clipboard</button>
+        <button class="btn btn-outline" onclick="importDataDialog()">📥 Import data.js or Backup</button>
+        <button class="btn btn-danger" onclick="resetToDataJs()">🔄 Reset to Original data.js</button>
+      ` : ''}
+      <button class="btn btn-secondary" onclick="exportProgressJson()">💾 Export My Progress (JSON)</button>
     </div>
     <div class="help-box" style="margin-top:1rem">
       <strong>Current stats:</strong> ${DATA.length} sections ·
       ${DATA.reduce((s, x) => s + x.chapters.length, 0)} chapters ·
       ${DATA.reduce((s, x) => s + x.chapters.reduce((a, c) => a + c.questions.length, 0), 0)} questions
     </div>
+    ${!admin ? `<div class="help-box" style="margin-top:1rem;background:rgba(13,115,119,.08)">
+      ℹ️ Content management is restricted to admin accounts.
+    </div>` : ''}
     <div class="modal-footer">
       <button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button>
     </div>
@@ -1686,6 +1817,7 @@ function buildDataJsText(){
     'const SECTIONS = ' + JSON.stringify(DATA, null, 2) + ';\n';
 }
 function exportDataJs(){
+  if (!requireAdmin()) return;
   const blob = new Blob([buildDataJsText()], { type: 'text/javascript' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1697,7 +1829,10 @@ function exportDataJs(){
   URL.revokeObjectURL(url);
   toast('data.js downloaded ✓');
 }
-function copyDataJs(){ copyToClipboard(buildDataJsText()); }
+function copyDataJs(){
+  if (!requireAdmin()) return;
+  copyToClipboard(buildDataJsText());
+}
 function exportProgressJson(){
   const blob = new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -1711,6 +1846,7 @@ function exportProgressJson(){
   toast('Progress exported ✓');
 }
 function importDataDialog(){
+  if (!requireAdmin()) return;
   openModal(`
     <div class="modal-header">
       <h3>📥 Import Data</h3>
@@ -1741,6 +1877,7 @@ function handleImportFile(e){
   reader.readAsText(file);
 }
 function processImport(){
+  if (!requireAdmin()) return;
   const text = document.getElementById('importText').value.trim();
   if (!text){ toast('Paste or choose a file first', true); return; }
   try {
@@ -1787,6 +1924,376 @@ function processImport(){
 loadData();
 renderSidebar();
 render();
+
+/* ============================================================
+   BACKEND CONNECTION
+   ============================================================ */
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxPfqmul5Apyy1W9k7HT0XQ6uxq7OMgM_4uPZRMW3BFN-ElRlh85dnXFsK2J6eXEyYn/exec";
+
+async function callBackend(payload) {
+  try {
+    const res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(payload)
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Backend error:", err);
+    return { result: "error", message: "Network error" };
+  }
+}
+
+async function registerUser(name, email, password) {
+  return await callBackend({ action: "register", name, email, password });
+}
+async function loginUser(email, password) {
+  return await callBackend({ action: "login", email, password });
+}
+async function saveScore(email, score, total, percentage) {
+  return await callBackend({
+    action: "saveScore", email, score,
+    total_questions: total, percentage
+  });
+}
+async function upgradeToPaid(email, txnId) {
+  return await callBackend({ action: "upgrade", email, txnId });
+}
+async function logPaymentClaim(email, name, amount) {
+  return await callBackend({
+    action: "logPaymentClaim", email, name, amount
+  });
+}
+
+/* ---- Session helpers ---- */
+function saveSession(user) {
+  localStorage.setItem("npc_user", JSON.stringify(user));
+}
+function getSession() {
+  try { return JSON.parse(localStorage.getItem("npc_user")); }
+  catch(e) { return null; }
+}
+function clearSession() {
+  localStorage.removeItem("npc_user");
+}
+
+/* ============================================================
+   AUTH UI LOGIC
+   ============================================================ */
+function openAuthModal() {
+  document.getElementById("authModal").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+function closeAuthModal() {
+  document.getElementById("authModal").classList.remove("show");
+  document.body.style.overflow = "";
+}
+function switchAuthTab(tab) {
+  document.getElementById("tabLogin").classList.toggle("active", tab === "login");
+  document.getElementById("tabRegister").classList.toggle("active", tab === "register");
+  document.getElementById("loginForm").style.display = tab === "login" ? "block" : "none";
+  document.getElementById("registerForm").style.display = tab === "register" ? "block" : "none";
+  document.getElementById("authTitle").textContent = tab === "login" ? "👤 Login" : "👤 Register";
+}
+
+async function doRegister() {
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const password = document.getElementById("regPassword").value;
+
+  if (!name || !email || !password) { toast("Fill all fields", true); return; }
+  if (password.length < 6) { toast("Password must be 6+ characters", true); return; }
+
+  const res = await registerUser(name, email, password);
+  if (res.result === "success") {
+    toast("Account created! You are on the Free plan.");
+    saveSession({ name, email, plan: "free", role: res.role || "user" });
+    closeAuthModal();
+    updateUserUI();
+    renderSidebar();   // refresh admin buttons
+    render();
+  } else {
+    toast(res.message || "Registration failed", true);
+  }
+}
+
+async function doLogin() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  if (!email || !password) { toast("Enter email and password", true); return; }
+
+  const res = await loginUser(email, password);
+  if (res.result === "success") {
+    toast("Welcome back, " + res.name);
+    saveSession({ name: res.name, email: res.email, plan: res.plan, role: res.role || "user" });
+    closeAuthModal();
+    updateUserUI();
+    renderSidebar();   // refresh admin buttons
+    render();
+  } else {
+    toast(res.message || "Login failed", true);
+  }
+}
+
+function updateUserUI() {
+  const user = getSession();
+  const label = document.getElementById("userLabel");
+  const btn = document.getElementById("authBtn");
+
+  if (user) {
+    const roleTag = isAdmin(user) ? '<span class="admin-badge">ADMIN</span>' : '';
+    const planTag = user.plan === "paid" ? " ⭐" : "";
+    label.innerHTML = escapeHtml(user.name) + planTag + roleTag;
+    btn.textContent = "👤";
+    btn.onclick = openProfileModal;
+  } else {
+    label.textContent = "";
+    btn.textContent = "👤";
+    btn.onclick = openAuthModal;
+  }
+}
+
+function openProfileModal() {
+  const user = getSession();
+  if (!user) return;
+  const admin = isAdmin(user);
+  const planLabel = user.plan === "paid" ? "⭐ Paid (Full Access)" : "Free (Limited Access)";
+  const roleLabel = admin ? '<span class="admin-badge">ADMIN</span>' : 'Student';
+  openModal(`
+    <div class="modal-header">
+      <h3>👤 My Profile</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div style="margin-bottom:1rem;">
+      <p><strong>Name:</strong> ${escapeHtml(user.name)}</p>
+      <p><strong>Email:</strong> ${escapeHtml(user.email)}</p>
+      <p><strong>Role:</strong> ${roleLabel}</p>
+      <p><strong>Plan:</strong> ${planLabel}</p>
+    </div>
+    ${admin ? `
+      <div class="help-box">
+        👑 You are an administrator. You can add, edit, and delete sections, chapters, and questions.
+      </div>
+    ` : ''}
+    ${user.plan === "free" && !admin ? `
+      <div class="help-box">
+        <strong>Upgrade to Paid</strong> — get access to all questions and full mock exams.
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="openUpgradeModal(); closeModal();">
+        ⭐ Upgrade to Paid (NPR 500)
+      </button>
+    ` : ''}
+    ${user.plan === "paid" ? `
+      <div class="help-box">
+        ⭐ You have full access. Thank you for supporting us!
+      </div>
+    ` : ''}
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="logoutUser()">Logout</button>
+    </div>
+  `);
+}
+
+function logoutUser() {
+  clearSession();
+  updateUserUI();
+  closeModal();
+  toast("Logged out");
+  renderSidebar();   // hide admin buttons
+  render();
+}
+
+/* ============================================================
+   UPGRADE MODAL — QR + WhatsApp flow
+   ============================================================ */
+const ADMIN_WHATSAPP = "9779825484265";
+const PAID_PRICE = 500;
+
+function openUpgradeModal() {
+  const user = getSession();
+  if (!user) {
+    toast("Please login first", true);
+    openAuthModal();
+    return;
+  }
+  if (user.plan === "paid") {
+    toast("You already have full access ⭐");
+    return;
+  }
+  document.getElementById("upgradeModal").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function closeUpgradeModal() {
+  document.getElementById("upgradeModal").classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+async function sendWhatsAppProof() {
+  const user = getSession();
+  if (!user) { toast("Please login first", true); return; }
+
+  try {
+    await logPaymentClaim(user.email, user.name, PAID_PRICE);
+  } catch(e) { /* ignore */ }
+
+  const message =
+    "Hello Rajesh sir,\n\n" +
+    "I have paid NPR " + PAID_PRICE + " for the NPC Exam Prep Paid Plan.\n\n" +
+    "Name: " + user.name + "\n" +
+    "Email: " + user.email + "\n" +
+    "Plan: Paid (NPR " + PAID_PRICE + ")\n\n" +
+    "I am attaching the payment screenshot below. Please verify and activate my account. 🙏";
+
+  const url = "https://wa.me/" + ADMIN_WHATSAPP + "?text=" + encodeURIComponent(message);
+  window.open(url, "_blank");
+  toast("Send your payment screenshot on WhatsApp ✓");
+}
+
+/* ============================================================
+   REFRESH USER PLAN + ROLE FROM BACKEND
+   ============================================================ */
+async function refreshUserPlan() {
+  const user = getSession();
+  if (!user || !user.email) return;
+
+  try {
+    const res = await callBackend({ action: "getUser", email: user.email });
+    if (res.result === "success") {
+      const planChanged = user.plan !== res.plan;
+      user.plan = res.plan;
+      user.name = res.name || user.name;
+      user.role = res.role || user.role || "user";
+      saveSession(user);
+      updateUserUI();
+      if (planChanged && res.plan === "paid") {
+        toast("⭐ Your account has been upgraded to Paid!");
+      }
+      if (planChanged) render();
+    }
+  } catch (e) {
+    console.log("Plan refresh skipped:", e);
+  }
+}
+
+/* ============================================================
+   INIT — final
+   ============================================================ */
+updateUserUI();
+refreshUserPlan();
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) refreshUserPlan();
+});
 </script>
+
+<!-- ============================================================ -->
+<!-- AUTH MODAL -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="authModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <h3 id="authTitle">👤 Login / Register</h3>
+      <button class="modal-close" onclick="closeAuthModal()">×</button>
+    </div>
+
+    <div class="tabs" style="margin-bottom:1rem;">
+      <button class="tab active" id="tabLogin" onclick="switchAuthTab('login')">Login</button>
+      <button class="tab" id="tabRegister" onclick="switchAuthTab('register')">Register</button>
+    </div>
+
+    <div id="loginForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-input" id="loginEmail" type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input class="form-input" id="loginPassword" type="password" placeholder="••••••">
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">Login</button>
+    </div>
+
+    <div id="registerForm" style="display:none;">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input class="form-input" id="regName" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-input" id="regEmail" type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input class="form-input" id="regPassword" type="password" placeholder="Min 6 characters">
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="doRegister()">Create Free Account</button>
+    </div>
+
+    <p style="font-size:.75rem;color:var(--text-light);margin-top:1rem;text-align:center;">
+      By registering you agree to our terms. Free plan includes limited questions.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- UPGRADE / PAYMENT MODAL -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="upgradeModal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <h3>⭐ Upgrade to Paid Plan</h3>
+      <button class="modal-close" onclick="closeUpgradeModal()">×</button>
+    </div>
+
+    <div style="text-align:center;margin-bottom:1rem;">
+      <p style="font-size:.95rem;color:var(--text-light);">
+        Get <strong>full access</strong> to all questions, unlimited mock exams, and every chapter.
+      </p>
+      <div style="font-size:2rem;font-weight:700;color:var(--primary);margin:.75rem 0;">
+        NPR 500
+      </div>
+      <p style="font-size:.8rem;color:var(--text-light);">One-time payment</p>
+    </div>
+
+    <div style="text-align:center;padding:1rem;background:var(--bg);border-radius:12px;border:1px solid var(--border);">
+      <p style="font-size:.85rem;font-weight:600;margin-bottom:.75rem;">
+        📱 Scan with eSewa App
+      </p>
+      <img src="esewa-qr.png" alt="eSewa QR Code"
+           style="width:220px;height:220px;border-radius:12px;border:2px solid var(--border);">
+      <p style="font-size:.8rem;color:var(--text-light);margin-top:.75rem;">
+        Pay to: <strong>Rajesh Chhetri</strong><br>
+        eSewa ID: <strong>9825484265</strong>
+      </p>
+    </div>
+
+    <div class="help-box" style="margin-top:1rem;">
+      <strong>How it works:</strong>
+      <ol style="margin:.5rem 0 0 1.2rem;font-size:.82rem;">
+        <li>Scan the QR and pay <strong>NPR 500</strong></li>
+        <li>Take a screenshot of the payment confirmation</li>
+        <li>Click the WhatsApp button below and send us the screenshot</li>
+        <li>We'll verify and activate your Paid plan within a few minutes</li>
+      </ol>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;margin-top:1rem;background:#25D366;"
+            onclick="sendWhatsAppProof()">
+      💬 I've Paid — Send Proof on WhatsApp
+    </button>
+
+    <button class="btn btn-secondary" style="width:100%;margin-top:.5rem;"
+            onclick="closeUpgradeModal()">
+      Cancel
+    </button>
+
+    <p style="font-size:.72rem;color:var(--text-light);margin-top:1rem;text-align:center;">
+      After sending proof, refresh the app to see your upgraded access.
+    </p>
+  </div>
+</div>
+
 </body>
 </html>
