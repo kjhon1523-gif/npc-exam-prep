@@ -576,6 +576,7 @@ let quizAnswers = [];
 let quizMode = 'practice';
 let mockTimer = null;
 let mockTimeLeft = 0;
+let _mockSaved = false;   // prevents saving the same score twice
 
 /* Progress */
 const STORAGE_KEY = 'npc_progress_v1';
@@ -1566,7 +1567,13 @@ function answerQuestion(i){
   render();
 }
 function nextQuestion(){
-  if (quizIndex < quizQuestions.length){ quizIndex++; render(); }
+  if (quizIndex < quizQuestions.length){
+    quizIndex++;
+    if (quizIndex >= quizQuestions.length && quizMode === 'mock'){
+      finalizeMockScore();
+    }
+    render();
+  }
 }
 function prevQuestion(){
   if (quizIndex > 0){ quizIndex--; render(); }
@@ -1597,6 +1604,7 @@ function startMock(numQuestions){
   const user = getSession();
   const admin = isAdmin(user);
   const maxQ = (admin || !isFreePlan(user)) ? PAID_MOCK_LIMIT : FREE_MOCK_LIMIT;
+  _mockSaved = false;
 
   const all = [];
   DATA.forEach(sec => sec.chapters.forEach(ch => {
@@ -1626,10 +1634,11 @@ function startMock(numQuestions){
       el.textContent = formatTime(mockTimeLeft);
       el.classList.toggle('warning', mockTimeLeft <= 60);
     }
-    if (mockTimeLeft <= 0){
+      if (mockTimeLeft <= 0){
       clearInterval(mockTimer);
       mockTimer = null;
       alert('Time is up!');
+      finalizeMockScore();
       quizIndex = quizQuestions.length;
       render();
     }
@@ -1677,6 +1686,7 @@ function renderMock(){
 function endMock(){
   if (!confirm('End exam and see results?')) return;
   if (mockTimer){ clearInterval(mockTimer); mockTimer = null; }
+  finalizeMockScore();
   quizIndex = quizQuestions.length;
   render();
 }
@@ -1956,6 +1966,35 @@ async function saveScore(email, score, total, percentage) {
     action: "saveScore", email, score,
     total_questions: total, percentage
   });
+}
+
+  // Called automatically when a mock exam ends.
+// Sends score, total, and percentage to Google Sheet.
+async function finalizeMockScore() {
+  if (quizMode !== 'mock') return;   // only for mock exams
+  if (_mockSaved) return;            // don't double-save
+  _mockSaved = true;
+
+  const user = getSession();
+  if (!user || !user.email) {
+    console.log("Not saving — user not logged in");
+    return;
+  }
+
+  const correct = quizAnswers.filter((a, i) => a === quizQuestions[i].answer).length;
+  const total = quizQuestions.length;
+  const pct = total ? Math.round(correct / total * 100) : 0;
+
+  try {
+    const res = await saveScore(user.email, correct, total, pct);
+    if (res && res.result === "success") {
+      console.log("✓ Score saved → " + correct + "/" + total + " = " + pct + "%");
+    } else {
+      console.warn("Score save failed:", res);
+    }
+  } catch(e) {
+    console.error("Score save error:", e);
+  }
 }
 async function upgradeToPaid(email, txnId) {
   return await callBackend({ action: "upgrade", email, txnId });
