@@ -379,6 +379,7 @@ h2{font-size:1.25rem;font-weight:700;color:var(--text);margin-bottom:1rem}
   <div class="logo"><span class="logo-icon">💊</span><span class="logo-text">NPC Exam Prep</span></div>
   <div class="header-actions">
     <input type="text" class="search-box" id="searchInput" placeholder="Search..." oninput="searchQuestions(this.value)">
+    <button class="icon-btn" id="adminBtn" onclick="openAdminDashboard()" title="Admin Dashboard" style="display:none;">📊</button>
     <button class="icon-btn" onclick="openSettings()" title="Settings &amp; Export">⚙️</button>
     <button class="icon-btn" onclick="toggleTheme()" title="Toggle dark mode" id="themeBtn">🌙</button>
   </div>
@@ -2040,6 +2041,7 @@ function updateUserUI() {
   const user = getSession();
   const label = document.getElementById("userLabel");
   const btn = document.getElementById("authBtn");
+  const adminBtn = document.getElementById("adminBtn");
 
   if (user) {
     const roleTag = isAdmin(user) ? '<span class="admin-badge">ADMIN</span>' : '';
@@ -2047,10 +2049,12 @@ function updateUserUI() {
     label.innerHTML = escapeHtml(user.name) + planTag + roleTag;
     btn.textContent = "👤";
     btn.onclick = openProfileModal;
+    if (adminBtn) adminBtn.style.display = isAdmin(user) ? 'flex' : 'none';
   } else {
     label.textContent = "";
     btn.textContent = "👤";
     btn.onclick = openAuthModal;
+    if (adminBtn) adminBtn.style.display = 'none';
   }
 }
 
@@ -2174,6 +2178,161 @@ async function refreshUserPlan() {
     }
   } catch (e) {
     console.log("Plan refresh skipped:", e);
+  }
+}
+
+/* ============================================================
+   ADMIN DASHBOARD (Phase 2)
+   ============================================================ */
+function formatAdminTime(timestamp) {
+  if (!timestamp) return "unknown";
+  try {
+    const d = new Date(timestamp);
+    const now = new Date();
+    const diff = Math.floor((now - d) / 1000);
+    if (diff < 60) return "just now";
+    if (diff < 3600) return Math.floor(diff / 60) + " min ago";
+    if (diff < 86400) return Math.floor(diff / 3600) + " hr ago";
+    if (diff < 604800) return Math.floor(diff / 86400) + " d ago";
+    return d.toLocaleDateString();
+  } catch(e) { return "unknown"; }
+}
+
+async function openAdminDashboard() {
+  const user = getSession();
+  if (!isAdmin(user)) { toast("Admin access required", true); return; }
+
+  // Loading state
+  openModal(`
+    <div class="modal-header">
+      <h3>📊 Admin Dashboard</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div style="text-align:center;padding:2rem 1rem;">
+      <div style="font-size:2rem;margin-bottom:.5rem;">⏳</div>
+      <p style="color:var(--text-light);">Loading stats…</p>
+    </div>
+  `);
+
+  try {
+    const res = await callBackend({ action: "getAdminStats", email: user.email });
+
+    if (res.result !== "success") {
+      openModal(`
+        <div class="modal-header">
+          <h3>📊 Admin Dashboard</h3>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="help-box" style="background:var(--danger);color:#fff;border-left-color:#fff;">
+          ⚠️ ${escapeHtml(res.message || "Failed to load stats")}
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button>
+        </div>
+      `);
+      return;
+    }
+
+    let html = `
+      <div class="modal-header">
+        <h3>📊 Admin Dashboard</h3>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.25rem;">
+        <div style="background:var(--primary-light);padding:1rem;border-radius:12px;text-align:center;">
+          <div style="font-size:1.8rem;font-weight:700;color:var(--primary-dark);">${res.totalUsers}</div>
+          <div style="font-size:.72rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;">Total Users</div>
+        </div>
+        <div style="background:var(--success-light);padding:1rem;border-radius:12px;text-align:center;">
+          <div style="font-size:1.8rem;font-weight:700;color:var(--success);">${res.paidUsers}</div>
+          <div style="font-size:.72rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;">Paid Users</div>
+        </div>
+        <div style="background:rgba(244,162,97,.15);padding:1rem;border-radius:12px;text-align:center;">
+          <div style="font-size:1.5rem;font-weight:700;color:var(--accent);">NPR ${res.revenue}</div>
+          <div style="font-size:.72rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;">Revenue</div>
+        </div>
+        <div style="background:rgba(231,111,81,.12);padding:1rem;border-radius:12px;text-align:center;">
+          <div style="font-size:1.8rem;font-weight:700;color:var(--danger);">${res.pendingCount}</div>
+          <div style="font-size:.72rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;">Pending</div>
+        </div>
+      </div>
+    `;
+
+    if (res.pendingPayments && res.pendingPayments.length > 0) {
+      html += `
+        <h4 style="font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;color:var(--text-light);margin-bottom:.5rem;">
+          ⏳ Pending Payment Claims
+        </h4>
+        <div style="margin-bottom:1.25rem;">
+          ${res.pendingPayments.map(p => `
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:.7rem .9rem;background:var(--bg);border:1px solid var(--border);border-radius:10px;margin-bottom:.5rem;">
+              <div style="min-width:0;flex:1;">
+                <div style="font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(p.name)}</div>
+                <div style="font-size:.73rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                  ${escapeHtml(p.email)} · ${formatAdminTime(p.timestamp)}
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="approveAdminUser('${escapeHtml(p.email)}')">✓ Approve</button>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="help-box" style="background:var(--success-light);border-left-color:var(--success);color:var(--success);margin-bottom:1.25rem;">
+          ✅ No pending payments. All caught up!
+        </div>
+      `;
+    }
+
+    if (res.recentSignups && res.recentSignups.length > 0) {
+      html += `
+        <h4 style="font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;color:var(--text-light);margin-bottom:.5rem;">
+          🕐 Recent Signups
+        </h4>
+        <div style="margin-bottom:1rem;">
+          ${res.recentSignups.map(u => `
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:.6rem .9rem;background:var(--bg);border:1px solid var(--border);border-radius:10px;margin-bottom:.4rem;">
+              <div style="min-width:0;flex:1;">
+                <div style="font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                  ${escapeHtml(u.name)}${u.plan === "paid" ? ' <span style="color:var(--success);">⭐</span>' : ''}
+                </div>
+                <div style="font-size:.72rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                  ${escapeHtml(u.email)} · ${formatAdminTime(u.timestamp)}
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    html += `
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button class="btn btn-secondary btn-sm" onclick="openAdminDashboard()">🔄 Refresh</button>
+        <div style="display:flex;gap:.5rem;">
+          <button class="btn btn-outline btn-sm" onclick="exportDataJs()">📤 Export data.js</button>
+          <button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+    `;
+
+    openModal(html);
+  } catch(e) {
+    toast("Failed to load dashboard: " + e.message, true);
+  }
+}
+
+async function approveAdminUser(email) {
+  if (!confirm("Approve payment for " + email + "?\n\nThis will upgrade them to Paid plan.")) return;
+
+  const res = await upgradeToPaid(email, "manual-approve-" + Date.now());
+  if (res.result === "success") {
+    toast("✓ User upgraded to Paid");
+    setTimeout(openAdminDashboard, 400);
+  } else {
+    toast("Approval failed: " + (res.message || "unknown"), true);
   }
 }
 
