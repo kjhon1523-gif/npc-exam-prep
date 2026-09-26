@@ -554,10 +554,9 @@ function isFreePlan(user){
 
 function getVisibleQuestions(chapter, user){
   const all = (chapter && chapter.questions) || [];
-  if (!isFreePlan(user)) return all;
+  if (isAdmin(user) || !isFreePlan(user)) return all;
   return all.slice(0, FREE_QUESTION_LIMIT);
 }
-
 function handleUpgradeClick(){
   if (getSession()) openProfileModal();
   else openAuthModal();
@@ -732,8 +731,8 @@ function renderHome(){
         <div class="hero-stat"><strong>${accuracy}%</strong><span>Accuracy</span></div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="startMock()">🎯 Start Mock Exam${isFree ? ' (10 Q)' : ' (150 Q)'}</button>
-        ${isFree ? `<button class="btn btn-secondary" onclick="openUpgradeModal()">⭐ Upgrade to Paid</button>` : ''}
+        <button class="btn btn-primary" onclick="startMock()">🎯 Start Mock Exam${(isFree && !admin) ? ' (10 Q)' : ' (150 Q)'}</button>
+                ${(isFree && !admin) ? `<button class="btn btn-secondary" onclick="openUpgradeModal()">⭐ Upgrade to Paid</button>` : ''}
         <button class="btn btn-secondary" onclick="continueWhereLeft()">📖 Continue Studying</button>
         ${admin ? `<button class="btn btn-outline" style="border-color:#fff;color:#fff" onclick="addSectionPrompt()">➕ Add Section</button>` : ''}
       </div>
@@ -796,7 +795,7 @@ function renderChapter(){
   const admin = isAdmin(user);
   const visibleCount = getVisibleQuestions(ch, user).length;
 
-  const banner = isFree ? `
+    const banner = (isFree && !admin) ? `
     <div class="help-box" style="background:var(--accent);color:#fff;border-left-color:#fff;">
       ⚡ <strong>Free Plan:</strong> You can practice the first ${FREE_QUESTION_LIMIT} questions per chapter.
       <button class="btn btn-sm" style="background:#fff;color:var(--accent);margin-left:.5rem;"
@@ -819,10 +818,10 @@ function renderChapter(){
       body = `
         <div class="quiz-header">
           <div class="quiz-progress">Progress: <strong>${answered}/${totalQ}</strong> · Accuracy: <strong>${answered ? Math.round(correct / answered * 100) : 0}%</strong></div>
-          <button class="btn btn-primary" onclick="startPractice('${sec.id}','${ch.id}')">▶ Start Practice${isFree ? ` (${visibleCount})` : ''}</button>
+          <button class="btn btn-primary" onclick="startPractice('${sec.id}','${ch.id}')">▶ Start Practice${(isFree && !admin) ? ` (${visibleCount})` : ''}</button>
         </div>
         <div class="progress-bar" style="height:8px"><div class="progress-fill" style="width:${pct}%"></div></div>
-        ${isFree ? `<p style="margin-top:.75rem;font-size:.8rem;color:var(--text-light)">
+                ${(isFree && !admin) ? `<p style="margin-top:.75rem;font-size:.8rem;color:var(--text-light)">
           🔒 Free plan — practice is limited to the first <strong>${visibleCount}</strong> of ${totalQ} questions in this chapter.
           <a href="javascript:void(0)" onclick="openUpgradeModal()" style="color:var(--primary);font-weight:600">Unlock all →</a>
         </p>` : ''}
@@ -1595,7 +1594,8 @@ function renderPracticeResults(){
    ============================================================ */
 function startMock(numQuestions){
   const user = getSession();
-  const maxQ = isFreePlan(user) ? FREE_MOCK_LIMIT : PAID_MOCK_LIMIT;
+  const admin = isAdmin(user);
+  const maxQ = (admin || !isFreePlan(user)) ? PAID_MOCK_LIMIT : FREE_MOCK_LIMIT;
 
   const all = [];
   DATA.forEach(sec => sec.chapters.forEach(ch => {
