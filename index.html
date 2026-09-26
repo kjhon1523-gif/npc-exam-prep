@@ -1704,7 +1704,10 @@ function renderMockResults(){
     <div class="card results-card">
       <div class="score-circle"><span class="num">${pct}%</span><span class="lbl">Score</span></div>
       <h2>Mock Exam Complete</h2>
-      <p class="subtitle">You scored ${correct} out of ${total}</p>
+            <p class="subtitle">
+        You scored ${correct} out of ${total}
+        ${getSession() ? '<br><small style="color:var(--success);">✓ Saved to your profile</small>' : ''}
+      </p>
       <div style="display:flex;gap:1.5rem;justify-content:center;margin:1.5rem 0;flex-wrap:wrap">
         <div><strong style="color:var(--success);font-size:1.4rem">${correct}</strong><div style="font-size:.78rem;color:var(--text-light)">Correct</div></div>
         <div><strong style="color:var(--danger);font-size:1.4rem">${wrong}</strong><div style="font-size:.78rem;color:var(--text-light)">Wrong</div></div>
