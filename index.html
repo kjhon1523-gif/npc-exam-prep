@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPC Exam Prep — Nepal Pharmacy Council Pharmacist License</title>
+<style>
+:root{
+  --primary:#0d7377;--primary-dark:#095052;--primary-light:#e6f4f5;
+  --accent:#f4a261;--success:#2a9d8f;--success-light:#e8f6f4;
+  --danger:#e76f51;--danger-dark:#c4482b;--text:#1a2b3c;--text-light:#5a6b7c;
+  --border:#dce6ed;--bg:#f5f8fa;--card:#ffffff;--sidebar:#0d7377;
+  --radius:14px;--shadow:0 2px 12px rgba(13,115,119,.08);
+  --shadow-lg:0 8px 32px rgba(13,115,119,.16);
+  --header-h:63px;
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+[data-theme="dark"]{
+  --primary:#14919b;
+  --primary-dark:#5fc9d4;
+  --primary-light:#1a3a3d;
+  --accent:#f4a261;
+  --success:#4cc2b5;
+  --success-light:#0f2e2a;
+  --danger:#f08b6e;
+  --danger-dark:#c4482b;
+  --text:#e6eef5;
+  --text-light:#9fb0bd;
+  --border:#2a3f47;
+  --bg:#0f1a1f;
+  --card:#1a2a30;
+  --sidebar:#0a1418;
+  --shadow:0 2px 12px rgba(0,0,0,.4);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.55);
+}
+[data-theme="dark"] .hero{background:linear-gradient(135deg,#0b5960,#14919b)}
+[data-theme="dark"] .btn-primary{background:#0f7a82;color:#fff}
+[data-theme="dark"] .btn-primary:hover{background:#14919b}
+[data-theme="dark"] .btn-danger{background:#c4482b;color:#fff}
+[data-theme="dark"] .btn-danger:hover{background:#a83a22}
+[data-theme="dark"] .notes h3{color:#5fc9d4}
+[data-theme="dark"] .notes h4{color:#7fd4dd}
+[data-theme="dark"] .notes strong{color:#7fd4dd}
+[data-theme="dark"] .notes code{background:rgba(255,255,255,.08);color:#7fd4dd}
+[data-theme="dark"] .notes th{background:rgba(255,255,255,.06);color:#7fd4dd;border-color:#2a3f47}
+[data-theme="dark"] .notes td{border-color:#2a3f47}
+[data-theme="dark"] .notes blockquote{background:rgba(244,162,97,.12);color:#e6eef5}
+[data-theme="dark"] .notes table{color:#e6eef5}
+[data-theme="dark"] .option.correct{background:#0f2e2a;color:#e6eef5;border-color:#4cc2b5}
+[data-theme="dark"] .option.correct .letter{color:#4cc2b5}
+[data-theme="dark"] .option.incorrect{background:#3a1f1a;color:#e6eef5;border-color:#f08b6e}
+[data-theme="dark"] .option.incorrect .letter{color:#f08b6e}
+[data-theme="dark"] .option:hover:not(.disabled){background:rgba(20,145,155,.18);border-color:#14919b}
+[data-theme="dark"] .option.selected{background:rgba(20,145,155,.2);border-color:#14919b}
+[data-theme="dark"] .feedback{background:#0f2e2a;color:#e6eef5;border-left-color:#4cc2b5}
+[data-theme="dark"] .feedback.wrong{background:#3a1f1a;border-left-color:#f08b6e}
+[data-theme="dark"] .feedback strong{color:#4cc2b5}
+[data-theme="dark"] .feedback.wrong strong{color:#f08b6e}
+[data-theme="dark"] .help-box{background:#163a3d;color:#a8e0e6;border-left-color:#14919b}
+[data-theme="dark"] .help-box code{background:rgba(255,255,255,.1);color:#a8e0e6}
+[data-theme="dark"] .option-letter{background:#1a3a3d;color:#7fd4dd}
+[data-theme="dark"] .option-letter:hover{background:#14919b;color:#fff}
+[data-theme="dark"] .option-letter.selected{background:#2a9d8f;color:#fff}
+[data-theme="dark"] .btn-secondary{background:#1a3a3d;color:#7fd4dd}
+[data-theme="dark"] .btn-secondary:hover{background:#14919b;color:#fff}
+[data-theme="dark"] .btn-outline{border-color:#14919b;color:#5fc9d4}
+[data-theme="dark"] .btn-outline:hover{background:#14919b;color:#fff}
+[data-theme="dark"] .section-title{background:linear-gradient(90deg,rgba(20,145,155,.15) 0%,transparent 100%);border-left-color:#14919b}
+[data-theme="dark"] .section-title h2{color:#7fd4dd}
+[data-theme="dark"] .progress-bar{background:#1a3a3d}
+[data-theme="dark"] .search-result .sr-loc{color:#5fc9d4}
+[data-theme="dark"] .subtitle{color:#9fb0bd}
+[data-theme="dark"] .sc-stats{color:#9fb0bd}
+[data-theme="dark"] .quiz-progress{color:#9fb0bd}
+[data-theme="dark"] .quiz-progress strong{color:#5fc9d4}
+[data-theme="dark"] .form-group label{color:#9fb0bd}
+[data-theme="dark"] .form-hint{color:#9fb0bd}
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-textarea{background:#0f1a1f;color:#e6eef5;border-color:#2a3f47}
+[data-theme="dark"] .form-input:focus,
+[data-theme="dark"] .form-textarea:focus{border-color:#14919b;background:#0a1418}
+[data-theme="dark"] .form-input::placeholder,
+[data-theme="dark"] .form-textarea::placeholder{color:#5a6b7c}
+[data-theme="dark"] .search-box{background:#1a2a30;color:#e6eef5;border-color:#2a3f47}
+[data-theme="dark"] .search-box::placeholder{color:#5a6b7c}
+[data-theme="dark"] .chapter-link.active{background:rgba(20,145,155,.2);border-left-color:#f4a261}
+[data-theme="dark"] .q-number{background:#14919b;color:#fff}
+[data-theme="dark"] .question-card{background:#1a2a30;border-color:#2a3f47}
+[data-theme="dark"] .q-text{color:#e6eef5}
+[data-theme="dark"] .score-circle{background:linear-gradient(135deg,#14919b,#2a9d8f)}
+[data-theme="dark"] .card{background:#1a2a30;border-color:#2a3f47}
+[data-theme="dark"] .section-card{background:#1a2a30;border-color:#2a3f47}
+[data-theme="dark"] .section-card:hover{border-color:#14919b}
+[data-theme="dark"] .section-card h3{color:#e6eef5}
+[data-theme="dark"] .modal{background:#1a2a30;border:1px solid #2a3f47}
+[data-theme="dark"] .modal-header h3{color:#e6eef5}
+[data-theme="dark"] .modal-header{border-bottom-color:#2a3f47}
+[data-theme="dark"] .modal-footer{border-top-color:#2a3f47}
+[data-theme="dark"] .tab{color:#9fb0bd}
+[data-theme="dark"] .tab:hover{color:#5fc9d4}
+[data-theme="dark"] .tab.active{color:#5fc9d4;border-bottom-color:#14919b}
+[data-theme="dark"] .search-result{background:#1a2a30;border-color:#2a3f47}
+[data-theme="dark"] .search-result:hover{border-color:#14919b}
+[data-theme="dark"] .search-result .sr-q{color:#e6eef5}
+[data-theme="dark"] .icon-btn{border-color:#2a3f47;color:#e6eef5}
+[data-theme="dark"] .icon-btn:hover{background:#1a3a3d;border-color:#14919b;color:#5fc9d4}
+[data-theme="dark"] .chapter-toolbar{border-bottom-color:#2a3f47}
+[data-theme="dark"] .empty{color:#9fb0bd}
+[data-theme="dark"] .empty .em-icon{opacity:.35}
+[data-theme="dark"] .toast{box-shadow:0 8px 24px rgba(0,0,0,.5)}
+[data-theme="dark"] .manage-item{background:#0f1a1f;border-color:#2a3f47}
+[data-theme="dark"] .manage-item-num{background:rgba(20,145,155,.2);color:#5fc9d4}
+[data-theme="dark"] .manage-item-q{color:#e6eef5}
+[data-theme="dark"] .manage-item-meta{color:#9fb0bd}
+[data-theme="dark"] .manage-item-meta .correct-badge{background:#0f2e2a;color:#4cc2b5}
+[data-theme="dark"] .manage-item-actions button{background:#1a2a30;border-color:#2a3f47;color:#9fb0bd}
+[data-theme="dark"] .manage-item-actions button:hover{background:rgba(20,145,155,.2);border-color:#14919b;color:#5fc9d4}
+[data-theme="dark"] .manage-item-actions button.danger:hover{background:rgba(240,139,110,.15);border-color:#f08b6e;color:#f08b6e}
+[data-theme="dark"] .live-preview{background:#0f1a1f;border-color:#2a3f47;color:#9fb0bd}
+[data-theme="dark"] .live-preview .pv-q{color:#e6eef5}
+[data-theme="dark"] .live-preview .pv-opt{color:#e6eef5}
+[data-theme="dark"] .live-preview .pv-opt.correct{background:#0f2e2a;color:#4cc2b5}
+[data-theme="dark"] .live-preview .pv-letter{color:#5fc9d4}
+[data-theme="dark"] .kbd-hint{background:#0f1a1f;border-color:#2a3f47;color:#9fb0bd}
+[data-theme="dark"] .kbd-hint kbd{background:#1a2a30;border-color:#2a3f47}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;height:var(--header-h);background:var(--card);border-bottom:1px solid var(--border);padding:0 1.25rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--shadow)}
+.menu-toggle{display:none;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--primary);padding:.25rem}
+.logo{font-weight:700;color:var(--primary);font-size:1.05rem;display:flex;align-items:center;gap:.5rem;white-space:nowrap}
+.logo .logo-icon{font-size:1.3rem}
+.header-actions{margin-left:auto;display:flex;gap:.5rem;align-items:center}
+.search-box{padding:.5rem .9rem;border:1.5px solid var(--border);border-radius:50px;font-size:.85rem;background:var(--bg);color:var(--text);width:220px;font-family:inherit;transition:all .2s}
+.search-box:focus{outline:none;border-color:var(--primary);width:280px}
+.icon-btn{background:none;border:1.5px solid var(--border);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--text);transition:all .2s}
+.icon-btn:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - var(--header-h))}
+aside{width:290px;background:var(--sidebar);color:#fff;padding:1.25rem 0;overflow-y:auto;flex-shrink:0;height:calc(100vh - var(--header-h));position:sticky;top:var(--header-h)}
+aside h3{padding:.5rem 1.25rem;font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.55);font-weight:600;display:flex;justify-content:space-between;align-items:center}
+aside h3 button{background:rgba(255,255,255,.15);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:.85rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .2s}
+aside h3 button:hover{background:rgba(255,255,255,.3)}
+.section-item{margin-bottom:.25rem;position:relative}
+.section-header{padding:.7rem 1.25rem;cursor:pointer;display:flex;align-items:center;gap:.6rem;font-weight:600;font-size:.9rem;transition:background .2s;color:#fff;border-left:3px solid transparent}
+.section-header:hover{background:rgba(255,255,255,.08)}
+.section-header.active{background:rgba(255,255,255,.12);border-left-color:var(--accent)}
+.section-header .icon{font-size:1.1rem}
+.section-header .arrow{margin-left:auto;font-size:.7rem;transition:transform .2s;opacity:.6}
+.section-item.open .section-header .arrow{transform:rotate(90deg)}
+.section-actions{position:absolute;right:.5rem;top:.55rem;display:none;gap:.2rem}
+.section-item:hover .section-actions{display:flex}
+.section-actions button{background:rgba(255,255,255,.15);border:none;color:#fff;width:22px;height:22px;border-radius:4px;cursor:pointer;font-size:.7rem;line-height:1}
+.section-actions button:hover{background:rgba(255,255,255,.3)}
+.chapters{max-height:0;overflow:hidden;transition:max-height .3s ease;background:rgba(0,0,0,.15)}
+.section-item.open .chapters{max-height:2000px}
+.chapter-link{display:flex;align-items:center;padding:.55rem 1.25rem .55rem 2.8rem;font-size:.82rem;color:rgba(255,255,255,.82);text-decoration:none;cursor:pointer;transition:all .2s;border-left:3px solid transparent;position:relative}
+.chapter-link:hover{background:rgba(255,255,255,.08);color:#fff}
+.chapter-link.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:var(--accent);font-weight:600}
+.chapter-link .qcount{font-size:.7rem;opacity:.6;margin-left:.4rem}
+.chapter-actions{margin-left:auto;display:none;gap:.15rem}
+.chapter-link:hover .chapter-actions{display:flex}
+.chapter-actions button{background:transparent;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:.75rem;padding:.15rem .25rem;border-radius:3px}
+.chapter-actions button:hover{color:#fff;background:rgba(255,255,255,.2)}
+
+main{flex:1;padding:1.5rem 2rem 3rem;max-width:1100px;margin:0 auto;width:100%;overflow-x:hidden}
+
+/* CARDS & BUTTONS */
+.card{background:var(--card);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:1.25rem}
+h1{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:var(--text);margin-bottom:.5rem;line-height:1.3}
+h2{font-size:1.25rem;font-weight:700;color:var(--text);margin-bottom:1rem}
+.subtitle{color:var(--text-light);font-size:.95rem;margin-bottom:1.5rem}
+.btn{padding:.6rem 1.2rem;border:none;border-radius:50px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,115,119,.3)}
+.btn-secondary{background:var(--primary-light);color:var(--primary-dark)}
+.btn-secondary:hover{background:var(--primary);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--primary);color:var(--primary)}
+.btn-outline:hover{background:var(--primary);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{background:var(--danger-dark)}
+.btn-sm{padding:.35rem .8rem;font-size:.78rem}
+.btn-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--primary),#14919b);color:#fff;border-radius:var(--radius);padding:2.5rem 2rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%}
+.hero h1{color:#fff;position:relative;z-index:1}
+.hero p{color:rgba(255,255,255,.92);margin-top:.5rem;font-size:1rem;max-width:600px;position:relative;z-index:1}
+.hero-stats{display:flex;gap:2rem;margin-top:1.5rem;flex-wrap:wrap;position:relative;z-index:1}
+.hero-stat{display:flex;flex-direction:column}
+.hero-stat strong{font-size:1.6rem;font-weight:700}
+.hero-stat span{font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;opacity:.85}
+
+/* SECTION GRID */
+.section-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-top:1rem}
+.section-card{background:var(--card);border-radius:var(--radius);padding:1.25rem;border:1px solid var(--border);cursor:pointer;transition:all .25s}
+.section-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
+.section-card .sc-icon{font-size:2rem;margin-bottom:.5rem;display:block}
+.section-card h3{font-size:1rem;color:var(--text);margin:0 0 .3rem}
+.section-card .sc-meta{font-size:.78rem;color:var(--text-light);margin-bottom:.75rem}
+.progress-bar{height:6px;background:var(--primary-light);border-radius:50px;overflow:hidden;margin-bottom:.5rem}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--success));border-radius:50px;transition:width .4s;width:0%}
+.sc-stats{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-light)}
+
+/* TABS */
+.tabs{display:flex;gap:.25rem;border-bottom:2px solid var(--border);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:.7rem 1.2rem;background:none;border:none;font-family:inherit;font-size:.88rem;font-weight:600;color:var(--text-light);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s}
+.tab:hover{color:var(--primary)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+
+/* NOTES */
+.notes{font-size:.95rem;line-height:1.8;color:var(--text)}
+.notes h3{color:var(--primary-dark);margin:1.25rem 0 .5rem;font-size:1.05rem}
+.notes h4{color:var(--primary);margin:1rem 0 .4rem;font-size:.95rem}
+.notes p{margin-bottom:.75rem}
+.notes ul,.notes ol{margin:.5rem 0 .75rem 1.5rem}
+.notes li{margin-bottom:.35rem}
+.notes strong{color:var(--primary-dark)}
+.notes code{background:var(--primary-light);padding:.15rem .4rem;border-radius:5px;font-size:.88em;color:var(--primary-dark)}
+.notes table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.88rem}
+.notes th,.notes td{padding:.6rem .8rem;border:1px solid var(--border);text-align:left}
+.notes th{background:var(--primary-light);color:var(--primary-dark);font-weight:600}
+.notes blockquote{border-left:4px solid var(--accent);background:rgba(244,162,97,.08);padding:.75rem 1rem;margin:.75rem 0;border-radius:0 8px 8px 0;font-size:.9rem}
+
+/* CHAPTER TOOLBAR */
+.chapter-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px dashed var(--border)}
+
+/* QUIZ */
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem}
+.quiz-progress{font-size:.85rem;color:var(--text-light);font-weight:600}
+.quiz-progress strong{color:var(--primary)}
+.timer{background:var(--primary);color:#fff;padding:.4rem .9rem;border-radius:50px;font-size:.85rem;font-weight:700;font-variant-numeric:tabular-nums}
+.timer.warning{background:var(--danger)}
+.question-card{background:var(--card);border-radius:var(--radius);padding:1.75rem;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:1rem;position:relative}
+.q-number{display:inline-block;background:var(--primary);color:#fff;font-size:.72rem;font-weight:700;padding:.25rem .75rem;border-radius:50px;margin-bottom:.75rem;letter-spacing:.3px}
+.q-text{font-size:1.02rem;font-weight:600;color:var(--text);margin-bottom:1.25rem;line-height:1.6}
+.options{display:flex;flex-direction:column;gap:.6rem}
+.option{padding:.9rem 1.1rem;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:.75rem;background:var(--card);font-size:.93rem;color:var(--text);text-align:left;font-family:inherit;width:100%}
+.option:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.option .letter{font-weight:700;color:var(--primary);flex-shrink:0;min-width:1.3em;font-size:1rem}
+.option.selected{border-color:var(--primary);background:var(--primary-light)}
+.option.correct{border-color:var(--success);background:var(--success-light)}
+.option.correct .letter{color:var(--success)}
+.option.incorrect{border-color:var(--danger);background:rgba(231,111,81,.08)}
+.option.incorrect .letter{color:var(--danger)}
+.option.disabled{cursor:default}
+.feedback{margin-top:1rem;padding:1rem 1.25rem;border-radius:12px;font-size:.9rem;line-height:1.7;border-left:4px solid var(--success);background:var(--success-light)}
+.feedback.wrong{border-left-color:var(--danger);background:rgba(231,111,81,.08)}
+.feedback strong{color:var(--success);display:block;margin-bottom:.35rem}
+.feedback.wrong strong{color:var(--danger)}
+
+/* RESULTS */
+.results-card{text-align:center;padding:2.5rem 1.5rem}
+.score-circle{width:150px;height:150px;border-radius:50%;margin:0 auto 1.25rem;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary),var(--success));color:#fff;box-shadow:var(--shadow-lg)}
+.score-circle .num{font-size:2.5rem;font-weight:700;line-height:1}
+.score-circle .lbl{font-size:.78rem;opacity:.9;text-transform:uppercase;letter-spacing:1px;margin-top:.25rem}
+
+/* EMPTY */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text-light)}
+.empty .em-icon{font-size:3rem;margin-bottom:.75rem;opacity:.4}
+
+/* MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:1.5rem;overflow-y:auto}
+.modal-backdrop.show{display:flex}
+.modal{background:var(--card);border-radius:var(--radius);max-width:820px;width:100%;padding:1.5rem;box-shadow:0 20px 60px rgba(0,0,0,.3);margin:auto 0}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.modal-header h3{font-size:1.15rem;color:var(--text)}
+.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-light);line-height:1}
+.modal-close:hover{color:var(--danger)}
+.modal-footer{display:flex;gap:.5rem;justify-content:flex-end;padding-top:1rem;border-top:1px solid var(--border);margin-top:1rem;flex-wrap:wrap}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:.8rem;font-weight:600;margin-bottom:.35rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px}
+.form-input,.form-textarea{width:100%;padding:.7rem .9rem;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:.9rem;background:var(--bg);color:var(--text);transition:border-color .2s}
+.form-input:focus,.form-textarea:focus{outline:none;border-color:var(--primary)}
+.form-textarea{resize:vertical;min-height:120px;line-height:1.6}
+.form-textarea.mono{font-family:'Consolas','Monaco','Courier New',monospace;font-size:.85rem;min-height:280px}
+.form-textarea.bulk{min-height:250px}
+.form-hint{font-size:.75rem;color:var(--text-light);margin-top:.35rem;font-style:italic}
+.option-row{display:flex;gap:.5rem;margin-bottom:.5rem;align-items:center}
+.option-letter{width:34px;height:34px;border-radius:50%;background:var(--primary-light);color:var(--primary-dark);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.option-letter:hover{background:var(--primary);color:#fff}
+.option-letter.selected{background:var(--success);color:#fff;border-color:var(--success)}
+.help-box{background:var(--primary-light);border-left:3px solid var(--primary);padding:.75rem 1rem;border-radius:8px;font-size:.82rem;margin-bottom:1rem;color:var(--primary-dark);line-height:1.6}
+.help-box code{background:rgba(13,115,119,.15);padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+
+/* SEARCH RESULT */
+.search-result{padding:1rem 1.25rem;border:1px solid var(--border);border-radius:12px;margin-bottom:.75rem;background:var(--card);cursor:pointer;transition:all .2s}
+.search-result:hover{border-color:var(--primary);box-shadow:var(--shadow)}
+.search-result .sr-loc{font-size:.72rem;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem}
+.search-result .sr-q{font-size:.9rem;color:var(--text);font-weight:600;line-height:1.5}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--success);color:#fff;padding:.75rem 1.5rem;border-radius:50px;font-size:.88rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);transition:transform .3s;z-index:2000;max-width:90%}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.error{background:var(--danger)}
+
+/* EDIT INDICATOR */
+.edit-badge{display:inline-block;font-size:.68rem;background:var(--accent);color:#fff;padding:.15rem .5rem;border-radius:50px;margin-left:.5rem;font-weight:700;letter-spacing:.3px}
+
+/* ============================================================
+   QUESTION MANAGER
+   ============================================================ */
+.manage-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px dashed var(--border)}
+.manage-list{display:flex;flex-direction:column;gap:.5rem}
+.manage-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;display:flex;gap:.75rem;align-items:flex-start;transition:all .2s}
+.manage-item:hover{border-color:var(--primary);box-shadow:var(--shadow)}
+.manage-item-num{font-weight:700;color:var(--primary);flex-shrink:0;min-width:2rem;font-size:.85rem;background:var(--primary-light);padding:.15rem .5rem;border-radius:6px;text-align:center}
+.manage-item-body{flex:1;min-width:0}
+.manage-item-q{font-size:.9rem;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:.4rem;word-wrap:break-word}
+.manage-item-meta{font-size:.75rem;color:var(--text-light);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.manage-item-meta .correct-badge{background:var(--success-light);color:var(--success);padding:.15rem .5rem;border-radius:50px;font-weight:700;font-size:.7rem}
+.manage-item-actions{display:flex;gap:.3rem;flex-shrink:0;flex-wrap:wrap}
+.manage-item-actions button{background:var(--card);border:1.5px solid var(--border);min-width:32px;height:32px;padding:0 .5rem;border-radius:8px;cursor:pointer;font-size:.8rem;color:var(--text-light);transition:all .2s;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.manage-item-actions button:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary);transform:translateY(-1px)}
+.manage-item-actions button.danger:hover{background:rgba(231,111,81,.15);border-color:var(--danger);color:var(--danger)}
+.manage-item-actions button:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+.live-preview{background:var(--bg);border:1.5px dashed var(--border);border-radius:10px;padding:.85rem 1rem;margin-top:.5rem;font-size:.85rem;color:var(--text-light);font-style:italic}
+.live-preview .pv-q{font-weight:600;color:var(--text);font-style:normal;margin-bottom:.5rem;line-height:1.5}
+.live-preview .pv-opt{display:flex;gap:.5rem;padding:.35rem .5rem;border-radius:6px;margin-bottom:.25rem;font-style:normal;color:var(--text);font-size:.82rem}
+.live-preview .pv-opt.correct{background:var(--success-light);color:var(--success);font-weight:600}
+.live-preview .pv-letter{font-weight:700;color:var(--primary);min-width:1.2em;flex-shrink:0}
+.live-preview .pv-opt.correct .pv-letter{color:var(--success)}
+
+.kbd-hint{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--text-light);background:var(--bg);border:1px solid var(--border);padding:.2rem .5rem;border-radius:5px;font-family:ui-monospace,monospace}
+.kbd-hint kbd{background:var(--card);border:1px solid var(--border);border-bottom-width:2px;padding:.05rem .35rem;border-radius:4px;font-size:.7rem;font-weight:600}
+
+.float-add{position:fixed;bottom:1.75rem;right:1.75rem;z-index:80;width:56px;height:56px;border-radius:50%;background:var(--primary);color:#fff;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 6px 20px rgba(13,115,119,.4);transition:all .25s;display:flex;align-items:center;justify-content:center;font-weight:300}
+.float-add:hover{background:var(--primary-dark);transform:scale(1.08) rotate(90deg);box-shadow:0 8px 28px rgba(13,115,119,.5)}
+.manage-empty{text-align:center;padding:2rem 1rem;color:var(--text-light)}
+.manage-empty .me-icon{font-size:2.5rem;margin-bottom:.5rem;opacity:.4}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150}
+.overlay.show{display:block}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .menu-toggle{display:block}
+  aside{position:fixed;left:-300px;top:0;height:100vh;z-index:200;transition:left .3s;padding-top:5rem;box-shadow:4px 0 20px rgba(0,0,0,.2)}
+  aside.open{left:0}
+  main{padding:1rem 1rem 3rem;max-width:100%}
+  .search-box{width:150px}
+  .search-box:focus{width:200px}
+  .hero{padding:1.75rem 1.25rem}
+  .hero-stats{gap:1.25rem}
+  .question-card{padding:1.25rem}
+  .modal{padding:1rem}
+}
+@media(max-width:600px){
+  header{padding:0 .75rem;gap:.5rem}
+  .logo-text{display:none}
+  .search-box{width:120px;padding:.45rem .75rem}
+  .search-box:focus{width:160px}
+  .icon-btn{width:34px;height:34px;font-size:.9rem}
+}
+@media(max-width:480px){
+  .float-add{bottom:1rem;right:1rem;width:48px;height:48px;font-size:1.3rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+  <div class="logo"><span class="logo-icon">💊</span><span class="logo-text">NPC Exam Prep</span></div>
+  <div class="header-actions">
+    <input type="text" class="search-box" id="searchInput" placeholder="Search..." oninput="searchQuestions(this.value)">
+    <button class="icon-btn" onclick="openSettings()" title="Settings &amp; Export">⚙️</button>
+    <button class="icon-btn" onclick="toggleTheme()" title="Toggle dark mode" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+  <aside id="sidebar">
+    <h3>Study Sections <button onclick="addSectionPrompt()" title="Add new section">+</button></h3>
+    <div id="sidebarNav"></div>
+  </aside>
+  <main id="mainContent"></main>
+</div>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+/* ============================================================
+   DATA LAYER — localStorage + data.js merge
+   ============================================================ */
+const DATA_KEY = 'npc_data_v3';
+
+let DATA = null;
+let _modalKeyHandler = null;
+
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
+
+function loadData(){
+  const stored = localStorage.getItem(DATA_KEY);
+  if (stored){
+    try {
+      const parsed = JSON.parse(stored);
+      DATA = Array.isArray(parsed) && parsed.length ? parsed : deepClone(SECTIONS);
+    } catch(e){
+      DATA = deepClone(SECTIONS);
+    }
+  } else {
+    DATA = deepClone(SECTIONS);
+    saveData();
+  }
+}
+function saveData(){
+  try {
+    localStorage.setItem(DATA_KEY, JSON.stringify(DATA));
+  } catch(e){
+    toast('Storage full! Export your data and clear browser storage.', true);
+  }
+}
+function resetToDataJs(){
+  if (!confirm('Reset ALL content back to the original data.js? Your local edits will be lost.')) return;
+  localStorage.removeItem(DATA_KEY);
+  DATA = deepClone(SECTIONS);
+  saveData();
+  toast('Reset complete');
+  closeModal();
+  renderSidebar();
+  navigate('home');
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function uid(prefix){
+  return (prefix || 'id') + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+function slugify(s){
+  return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'item';
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function toast(msg, isError){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+async function copyToClipboard(text){
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('Copied to clipboard ✓');
+    return true;
+  } catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); toast('Copied ✓'); }
+    catch(err){ toast('Copy failed — select manually', true); }
+    document.body.removeChild(ta);
+  }
+}
+async function pasteFromClipboard(){
+  try {
+    return await navigator.clipboard.readText();
+  } catch(e){
+    toast('Paste not allowed. Use Ctrl+V in the field.', true);
+    return null;
+  }
+}
+
+/* ============================================================
+   MODAL SYSTEM
+   ============================================================ */
+function openModal(html){
+  if (_modalKeyHandler){
+    document.removeEventListener('keydown', _modalKeyHandler);
+    _modalKeyHandler = null;
+  }
+  document.getElementById('modalBox').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('show');
+  document.body.style.overflow = '';
+  if (_modalKeyHandler){
+    document.removeEventListener('keydown', _modalKeyHandler);
+    _modalKeyHandler = null;
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('modal').classList.contains('show')) closeModal();
+});
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target.id === 'modal') closeModal();
+});
+
+/* ============================================================
+   APP STATE
+   ============================================================ */
+let currentView = 'home';
+let currentSection = null;
+let currentChapter = null;
+let currentTab = 'notes';
+let quizQuestions = [];
+let quizIndex = 0;
+let quizAnswers = [];
+let quizMode = 'practice';
+let mockTimer = null;
+let mockTimeLeft = 0;
+
+/* Progress */
+const STORAGE_KEY = 'npc_progress_v1';
+let progress = {};
+try { progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e){ progress = {}; }
+
+function saveProgress(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+function getChapterProgress(sid, cid){
+  return progress[sid + '/' + cid] || { answered: [], correct: [] };
+}
+function markAnswered(sid, cid, qIdx, isCorrect){
+  const key = sid + '/' + cid;
+  if (!progress[key]) progress[key] = { answered: [], correct: [] };
+  if (!progress[key].answered.includes(qIdx)) progress[key].answered.push(qIdx);
+  if (isCorrect && !progress[key].correct.includes(qIdx)) progress[key].correct.push(qIdx);
+  saveProgress();
+}
+
+/* ============================================================
+   THEME
+   ============================================================ */
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  localStorage.setItem('npc_theme', next);
+}
+(function initTheme(){
+  const saved = localStorage.getItem('npc_theme');
+  if (saved) applyTheme(saved);
+})();
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function renderSidebar(){
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = DATA.map(sec => `
+    <div class="section-item" data-sid="${sec.id}">
+      <div class="section-header" onclick="toggleSection('${sec.id}')">
+        <span class="icon">${sec.icon || '📘'}</span>
+        <span>${escapeHtml(sec.title)}</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="section-actions">
+        <button onclick="event.stopPropagation();editSection('${sec.id}')" title="Edit section">✏️</button>
+        <button onclick="event.stopPropagation();addChapterToSection('${sec.id}')" title="Add chapter">➕</button>
+        <button onclick="event.stopPropagation();deleteSection('${sec.id}')" title="Delete section">🗑️</button>
+      </div>
+      <div class="chapters">
+        ${sec.chapters.map(ch => `
+          <div class="chapter-link" data-cid="${ch.id}" onclick="openChapter('${sec.id}','${ch.id}')">
+            <span>${escapeHtml(ch.title)}</span>
+            <span class="qcount">(${ch.questions.length})</span>
+            <div class="chapter-actions">
+              <button onclick="event.stopPropagation();editChapter('${sec.id}','${ch.id}')" title="Edit">✏️</button>
+              <button onclick="event.stopPropagation();deleteChapter('${sec.id}','${ch.id}')" title="Delete">🗑️</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function toggleSection(sid){
+  const item = document.querySelector(`.section-item[data-sid="${sid}"]`);
+  if (item) item.classList.toggle('open');
+}
+function openSectionFromCard(sid){
+  const item = document.querySelector(`.section-item[data-sid="${sid}"]`);
+  if (!item) return;
+  item.classList.add('open');
+  const sec = DATA.find(s => s.id === sid);
+  if (sec && sec.chapters.length) openChapter(sid, sec.chapters[0].id);
+  else toast('This section has no chapters yet');
+}
+
+/* ============================================================
+   ROUTING
+   ============================================================ */
+function navigate(view){
+  if (view !== 'mock' && mockTimer){
+    clearInterval(mockTimer);
+    mockTimer = null;
+  }
+  currentView = view;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  render();
+  if (window.innerWidth <= 900){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+  }
+}
+function render(){
+  const main = document.getElementById('mainContent');
+  if (currentView === 'home') main.innerHTML = renderHome();
+  else if (currentView === 'chapter') main.innerHTML = renderChapter();
+  else if (currentView === 'practice') main.innerHTML = renderPractice();
+  else if (currentView === 'mock') main.innerHTML = renderMock();
+  else if (currentView === 'search') main.innerHTML = renderSearch();
+
+  document.querySelectorAll('.chapter-link').forEach(el => el.classList.remove('active'));
+  if (currentChapter){
+    const el = document.querySelector(`.chapter-link[data-cid="${currentChapter.id}"]`);
+    if (el){
+      el.classList.add('active');
+      el.closest('.section-item')?.classList.add('open');
+    }
+  }
+}
+
+/* ============================================================
+   HOME
+   ============================================================ */
+function renderHome(){
+  const totalQ = DATA.reduce((s, sec) => s + sec.chapters.reduce((a, c) => a + c.questions.length, 0), 0);
+  const totalCh = DATA.reduce((s, sec) => s + sec.chapters.length, 0);
+  let totalAnswered = 0, totalCorrect = 0;
+  Object.values(progress).forEach(p => {
+    totalAnswered += p.answered.length;
+    totalCorrect += p.correct.length;
+  });
+  const accuracy = totalAnswered ? Math.round(totalCorrect / totalAnswered * 100) : 0;
+
+  return `
+    <div class="hero">
+      <h1>💊 Nepal Pharmacy Council Exam Prep</h1>
+      <p>Pharmacist License Examination (B.Pharm) — Practice MCQs, study notes, and full mock exams.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>${totalQ}</strong><span>Questions</span></div>
+        <div class="hero-stat"><strong>${totalCh}</strong><span>Chapters</span></div>
+        <div class="hero-stat"><strong>${DATA.length}</strong><span>Sections</span></div>
+        <div class="hero-stat"><strong>${accuracy}%</strong><span>Accuracy</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="startMock()">🎯 Start Mock Exam</button>
+        <button class="btn btn-secondary" onclick="continueWhereLeft()">📖 Continue Studying</button>
+        <button class="btn btn-outline" style="border-color:#fff;color:#fff" onclick="addSectionPrompt()">➕ Add Section</button>
+      </div>
+    </div>
+
+    <h2>Syllabus Sections</h2>
+    <p class="subtitle">Tap any section to open its first chapter. Hover over sections/chapters in the sidebar to edit, add, or delete.</p>
+    <div class="section-grid">
+      ${DATA.map(sec => {
+        const total = sec.chapters.reduce((s, c) => s + c.questions.length, 0);
+        let answered = 0, correct = 0;
+        sec.chapters.forEach(c => {
+          const p = getChapterProgress(sec.id, c.id);
+          answered += p.answered.length;
+          correct += p.correct.length;
+        });
+        const pct = total ? Math.round(answered / total * 100) : 0;
+        return `
+          <div class="section-card" onclick="openSectionFromCard('${sec.id}')">
+            <span class="sc-icon">${sec.icon || '📘'}</span>
+            <h3>${escapeHtml(sec.title)}</h3>
+            <div class="sc-meta">${sec.chapters.length} chapters · ${total} questions</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <div class="sc-stats"><span>${answered}/${total} answered</span><span>${pct}%</span></div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+function continueWhereLeft(){
+  for (const sec of DATA){
+    for (const ch of sec.chapters){
+      if (ch.questions.length > 0){ openChapter(sec.id, ch.id); return; }
+    }
+  }
+  toast('No questions available yet — add some first');
+}
+
+/* ============================================================
+   CHAPTER VIEW
+   ============================================================ */
+function openChapter(sid, cid){
+  currentSection = DATA.find(s => s.id === sid);
+  currentChapter = currentSection?.chapters.find(c => c.id === cid);
+  currentTab = 'notes';
+  navigate('chapter');
+}
+function renderChapter(){
+  if (!currentSection || !currentChapter) return '<div class="empty">Chapter not found</div>';
+  const sec = currentSection, ch = currentChapter;
+  const p = getChapterProgress(sec.id, ch.id);
+  const totalQ = ch.questions.length;
+  const answered = p.answered.length;
+  const correct = p.correct.length;
+  const pct = totalQ ? Math.round(answered / totalQ * 100) : 0;
+
+  let body = '';
+  if (currentTab === 'notes'){
+    body = ch.notes
+      ? `<div class="notes">${ch.notes}</div>`
+      : `<div class="empty"><div class="em-icon">📝</div><p>No study notes yet. Click "Edit Notes" to add them.</p></div>`;
+  } else if (currentTab === 'manage'){
+    body = renderManageTab(sec, ch);
+  } else {
+    if (totalQ === 0){
+      body = `<div class="empty"><div class="em-icon">📝</div><p>No practice questions yet.</p>
+        <button class="btn btn-primary" onclick="addQuestionToChapter('${sec.id}','${ch.id}')">➕ Add First Question</button></div>`;
+    } else {
+      body = `
+        <div class="quiz-header">
+          <div class="quiz-progress">Progress: <strong>${answered}/${totalQ}</strong> · Accuracy: <strong>${answered ? Math.round(correct / answered * 100) : 0}%</strong></div>
+          <button class="btn btn-primary" onclick="startPractice('${sec.id}','${ch.id}')">▶ Start Practice</button>
+        </div>
+        <div class="progress-bar" style="height:8px"><div class="progress-fill" style="width:${pct}%"></div></div>
+      `;
+    }
+  }
+
+  return `
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;font-size:.82rem;color:var(--text-light);flex-wrap:wrap">
+      <span style="cursor:pointer;color:var(--primary)" onclick="navigate('home')">🏠 Home</span>
+      <span>›</span><span>${sec.icon || ''} ${escapeHtml(sec.title)}</span>
+      <span>›</span><span>${escapeHtml(ch.title)}</span>
+    </div>
+    <h1>${escapeHtml(ch.title)}</h1>
+    <p class="subtitle">${escapeHtml(sec.title)} · ${totalQ} questions</p>
+
+    <div class="chapter-toolbar">
+      <button class="btn btn-primary btn-sm" onclick="editNotes('${sec.id}','${ch.id}')">✏️ Edit Notes</button>
+      <button class="btn btn-secondary btn-sm" onclick="copyChapterNotes('${sec.id}','${ch.id}')">📋 Copy Notes</button>
+      <button class="btn btn-secondary btn-sm" onclick="addQuestionToChapter('${sec.id}','${ch.id}')">➕ Add Question</button>
+      <button class="btn btn-secondary btn-sm" onclick="bulkImportQuestions('${sec.id}','${ch.id}')">📥 Bulk Import</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteChapter('${sec.id}','${ch.id}')">🗑️ Delete Chapter</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab ${currentTab === 'notes' ? 'active' : ''}" onclick="switchTab('notes')">📖 Study Notes</button>
+      <button class="tab ${currentTab === 'practice' ? 'active' : ''}" onclick="switchTab('practice')">✏️ Practice (${totalQ})</button>
+      <button class="tab ${currentTab === 'manage' ? 'active' : ''}" onclick="switchTab('manage')">⚙️ Manage Questions (${totalQ})</button>
+    </div>
+
+    <div class="card">${body}</div>
+  `;
+}
+function switchTab(t){ currentTab = t; render(); }
+
+/* ============================================================
+   MANAGE TAB
+   ============================================================ */
+function renderManageTab(sec, ch){
+  const total = ch.questions.length;
+  if (!total){
+    return `
+      <div class="manage-toolbar">
+        <button class="btn btn-primary btn-sm" onclick="addQuestionToChapter('${sec.id}','${ch.id}')">➕ Add First Question</button>
+        <button class="btn btn-secondary btn-sm" onclick="bulkImportQuestions('${sec.id}','${ch.id}')">📥 Bulk Import</button>
+      </div>
+      <div class="manage-empty">
+        <div class="me-icon">📝</div>
+        <p>No questions yet. Click <strong>"Add First Question"</strong> above to start building your bank.</p>
+        <p style="font-size:.8rem;margin-top:.5rem">Tip: Use bulk import to paste hundreds at once.</p>
+      </div>
+    `;
+  }
+  return `
+    <div class="manage-toolbar">
+      <button class="btn btn-primary btn-sm" onclick="addQuestionToChapter('${sec.id}','${ch.id}')">➕ Add Question</button>
+      <button class="btn btn-secondary btn-sm" onclick="bulkImportQuestions('${sec.id}','${ch.id}')">📥 Bulk Import</button>
+      <button class="btn btn-secondary btn-sm" onclick="exportChapterQuestions('${sec.id}','${ch.id}')">📤 Export as Text</button>
+      <button class="btn btn-secondary btn-sm" onclick="copyChapterQuestions('${sec.id}','${ch.id}')">📋 Copy All</button>
+      <button class="btn btn-outline btn-sm" onclick="startPractice('${sec.id}','${ch.id}')">▶ Practice</button>
+    </div>
+    <div class="manage-list">
+      ${ch.questions.map((q, i) => `
+        <div class="manage-item">
+          <span class="manage-item-num">${i + 1}</span>
+          <div class="manage-item-body">
+            <div class="manage-item-q">${escapeHtml(q.q)}</div>
+            <div class="manage-item-meta">
+              <span class="correct-badge">✓ ${String.fromCharCode(65 + q.answer)}) ${escapeHtml((q.options[q.answer] || '').slice(0, 40))}${(q.options[q.answer] || '').length > 40 ? '…' : ''}</span>
+              ${q.explanation ? `<span>💡 Has explanation</span>` : `<span style="opacity:.5">No explanation</span>`}
+            </div>
+          </div>
+          <div class="manage-item-actions">
+            <button onclick="moveQuestion('${sec.id}','${ch.id}',${i},-1)" title="Move up" ${i === 0 ? 'disabled' : ''}>▲</button>
+            <button onclick="moveQuestion('${sec.id}','${ch.id}',${i},1)" title="Move down" ${i === total - 1 ? 'disabled' : ''}>▼</button>
+            <button onclick="duplicateQuestion('${sec.id}','${ch.id}',${i})" title="Duplicate">📄</button>
+            <button onclick="editQuestion('${sec.id}','${ch.id}',${i})" title="Edit">✏️</button>
+            <button class="danger" onclick="confirmDeleteQuestion('${sec.id}','${ch.id}',${i})" title="Delete">🗑️</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function moveQuestion(sid, cid, idx, dir){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  const target = idx + dir;
+  if (target < 0 || target >= ch.questions.length) return;
+  [ch.questions[idx], ch.questions[target]] = [ch.questions[target], ch.questions[idx]];
+  saveData();
+  render();
+}
+
+function duplicateQuestion(sid, cid, idx){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  const copy = deepClone(ch.questions[idx]);
+  copy.q += ' (copy)';
+  ch.questions.splice(idx + 1, 0, copy);
+  saveData();
+  toast('Question duplicated ✓');
+  render();
+}
+
+function exportChapterQuestions(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  const blob = new Blob([buildChapterQuestionsText(sid, cid)], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = slugify(ch.title) + '-questions.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Exported ✓');
+}
+
+function copyChapterQuestions(sid, cid){
+  copyToClipboard(buildChapterQuestionsText(sid, cid));
+}
+
+function buildChapterQuestionsText(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return '';
+  return ch.questions.map((q, i) => {
+    const opts = q.options.map((o, j) => `${String.fromCharCode(65 + j)}) ${o}`).join('\n');
+    return `Q${i + 1}: ${q.q}\n${opts}\nAns: ${String.fromCharCode(65 + q.answer)}${q.explanation ? `\nExp: ${q.explanation}` : ''}`;
+  }).join('\n\n---\n\n');
+}
+
+/* ============================================================
+   EDIT NOTES
+   ============================================================ */
+function editNotes(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  openModal(`
+    <div class="modal-header">
+      <h3>✏️ Edit Study Notes — ${escapeHtml(ch.title)}</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="help-box">
+      <strong>Tips:</strong> Paste content directly from Word/PDF, then use HTML tags:
+      <code>&lt;h3&gt;</code> heading, <code>&lt;p&gt;</code> paragraph, <code>&lt;ul&gt;&lt;li&gt;</code> list,
+      <code>&lt;strong&gt;</code> bold, <code>&lt;table&gt;</code> table, <code>&lt;blockquote&gt;</code> quote.
+      You can also paste raw HTML.
+    </div>
+    <div class="form-group">
+      <label>Notes (HTML)</label>
+      <textarea class="form-textarea mono" id="notesEditor" placeholder="Paste or type your notes here...">${escapeHtml(ch.notes || '')}</textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="pasteIntoEditor()">📋 Paste</button>
+      <button class="btn btn-outline btn-sm" onclick="copyEditorContent()">📄 Copy</button>
+      <button class="btn btn-outline btn-sm" onclick="previewNotes()">👁️ Preview</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveNotes('${sid}','${cid}')">💾 Save</button>
+    </div>
+  `);
+  setTimeout(() => document.getElementById('notesEditor')?.focus(), 100);
+}
+async function pasteIntoEditor(){
+  const text = await pasteFromClipboard();
+  if (text === null) return;
+  const ta = document.getElementById('notesEditor');
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  ta.value = ta.value.slice(0, start) + text + ta.value.slice(end);
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = start + text.length;
+}
+function copyEditorContent(){
+  const ta = document.getElementById('notesEditor');
+  if (ta) copyToClipboard(ta.value);
+}
+function previewNotes(){
+  const ta = document.getElementById('notesEditor');
+  if (!ta) return;
+  const w = window.open('', '_blank');
+  if (!w) { toast('Popup blocked — allow popups for preview', true); return; }
+  w.document.write(`<!DOCTYPE html><html><head><title>Preview</title><style>
+    body{font-family:system-ui,sans-serif;max-width:800px;margin:2rem auto;padding:1rem;line-height:1.7}
+    h3{color:#0d7377;margin:1.25rem 0 .5rem}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{padding:.6rem;border:1px solid #ddd;text-align:left}
+    th{background:#e6f4f5}
+    code{background:#e6f4f5;padding:.15rem .4rem;border-radius:4px}
+    blockquote{border-left:4px solid #f4a261;padding:.75rem 1rem;background:#fef3e8;margin:.75rem 0}
+  </style></head><body>${ta.value}</body></html>`);
+  w.document.close();
+}
+function saveNotes(sid, cid){
+  const ta = document.getElementById('notesEditor');
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch || !ta) return;
+  ch.notes = ta.value;
+  saveData();
+  toast('Notes saved ✓');
+  closeModal();
+  render();
+}
+function copyChapterNotes(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  copyToClipboard(ch?.notes || '');
+}
+
+/* ============================================================
+   SECTION / CHAPTER CRUD
+   ============================================================ */
+function addSectionPrompt(){
+  openModal(`
+    <div class="modal-header">
+      <h3>➕ Add New Section</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-group">
+      <label>Section Title</label>
+      <input class="form-input" id="newSectionTitle" placeholder="e.g., Medicinal Chemistry">
+    </div>
+    <div class="form-group">
+      <label>Icon (emoji)</label>
+      <input class="form-input" id="newSectionIcon" value="📘" maxlength="4">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveNewSection()">Create</button>
+    </div>
+  `);
+  setTimeout(() => document.getElementById('newSectionTitle')?.focus(), 100);
+}
+function saveNewSection(){
+  const title = document.getElementById('newSectionTitle').value.trim();
+  const icon = document.getElementById('newSectionIcon').value.trim() || '📘';
+  if (!title){ toast('Enter a title', true); return; }
+  DATA.push({ id: slugify(title) + '_' + Date.now().toString(36), title, icon, chapters: [] });
+  saveData();
+  toast('Section created ✓');
+  closeModal();
+  renderSidebar();
+  render();
+}
+function editSection(sid){
+  const sec = DATA.find(s => s.id === sid);
+  if (!sec) return;
+  openModal(`
+    <div class="modal-header">
+      <h3>✏️ Edit Section</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-group">
+      <label>Section Title</label>
+      <input class="form-input" id="editSectionTitle" value="${escapeHtml(sec.title)}">
+    </div>
+    <div class="form-group">
+      <label>Icon (emoji)</label>
+      <input class="form-input" id="editSectionIcon" value="${escapeHtml(sec.icon || '📘')}" maxlength="4">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveEditSection('${sid}')">Save</button>
+    </div>
+  `);
+}
+function saveEditSection(sid){
+  const sec = DATA.find(s => s.id === sid);
+  if (!sec) return;
+  sec.title = document.getElementById('editSectionTitle').value.trim() || sec.title;
+  sec.icon = document.getElementById('editSectionIcon').value.trim() || sec.icon;
+  saveData();
+  toast('Section saved ✓');
+  closeModal();
+  renderSidebar();
+  render();
+}
+function deleteSection(sid){
+  const sec = DATA.find(s => s.id === sid);
+  if (!sec) return;
+  if (!confirm(`Delete section "${sec.title}" and all its chapters + questions? This cannot be undone.`)) return;
+  DATA = DATA.filter(s => s.id !== sid);
+  saveData();
+  toast('Section deleted');
+  renderSidebar();
+  if (currentSection && currentSection.id === sid){
+    currentSection = null;
+    currentChapter = null;
+    navigate('home');
+  } else {
+    render();
+  }
+}
+
+function addChapterToSection(sid){
+  const sec = DATA.find(s => s.id === sid);
+  if (!sec) return;
+  openModal(`
+    <div class="modal-header">
+      <h3>➕ Add Chapter to "${escapeHtml(sec.title)}"</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-group">
+      <label>Chapter Title</label>
+      <input class="form-input" id="newChapterTitle" placeholder="e.g., Antibiotics">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveNewChapter('${sid}')">Create</button>
+    </div>
+  `);
+  setTimeout(() => document.getElementById('newChapterTitle')?.focus(), 100);
+}
+function saveNewChapter(sid){
+  const sec = DATA.find(s => s.id === sid);
+  const title = document.getElementById('newChapterTitle').value.trim();
+  if (!sec || !title){ toast('Enter a title', true); return; }
+  const newCh = { id: slugify(title) + '_' + Date.now().toString(36), title, notes: '', questions: [] };
+  sec.chapters.push(newCh);
+  saveData();
+  toast('Chapter created ✓');
+  closeModal();
+  renderSidebar();
+  openChapter(sid, newCh.id);
+}
+function editChapter(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  openModal(`
+    <div class="modal-header">
+      <h3>✏️ Edit Chapter</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-group">
+      <label>Chapter Title</label>
+      <input class="form-input" id="editChapterTitle" value="${escapeHtml(ch.title)}">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveEditChapter('${sid}','${cid}')">Save</button>
+    </div>
+  `);
+}
+function saveEditChapter(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  ch.title = document.getElementById('editChapterTitle').value.trim() || ch.title;
+  saveData();
+  toast('Chapter saved ✓');
+  closeModal();
+  renderSidebar();
+  render();
+}
+function deleteChapter(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  if (!confirm(`Delete chapter "${ch.title}"?`)) return;
+  sec.chapters = sec.chapters.filter(c => c.id !== cid);
+  saveData();
+  toast('Chapter deleted');
+  renderSidebar();
+  if (currentChapter && currentChapter.id === cid){
+    currentChapter = null;
+    navigate('home');
+  } else {
+    render();
+  }
+}
+
+/* ============================================================
+   QUESTION CRUD
+   ============================================================ */
+function addQuestionToChapter(sid, cid){
+  openQuestionEditor(sid, cid, -1);
+}
+function editQuestion(sid, cid, idx){
+  openQuestionEditor(sid, cid, idx);
+}
+function openQuestionEditor(sid, cid, idx){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  const q = (idx >= 0 && ch.questions[idx])
+    ? ch.questions[idx]
+    : { q: '', options: ['', '', '', ''], answer: 0, explanation: '' };
+  const isNew = idx < 0;
+
+  openModal(`
+    <div class="modal-header">
+      <h3>${isNew ? '➕ Add Question' : '✏️ Edit Question'} — ${escapeHtml(ch.title)}${!isNew ? ` <span class="edit-badge">EDITING Q${idx + 1}</span>` : ''}</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+
+    <div class="form-group">
+      <label>Question <span class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> saves</span></label>
+      <textarea class="form-textarea" id="qText" style="min-height:80px" placeholder="Type the question..." oninput="updateLivePreview()">${escapeHtml(q.q)}</textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Options (click the letter to mark the correct answer)</label>
+      ${[0, 1, 2, 3].map(i => `
+        <div class="option-row">
+          <div class="option-letter ${q.answer === i ? 'selected' : ''}" id="letter_${i}" onclick="selectAnswer(${i})" title="Mark as correct answer">${String.fromCharCode(65 + i)}</div>
+          <input type="text" class="form-input" id="opt_${i}" value="${escapeHtml(q.options[i] || '')}" placeholder="Option ${String.fromCharCode(65 + i)}" oninput="updateLivePreview()">
+        </div>
+      `).join('')}
+      <input type="hidden" id="correctAnswer" value="${q.answer}">
+    </div>
+
+    <div class="form-group">
+      <label>Explanation</label>
+      <textarea class="form-textarea" id="qExplanation" style="min-height:80px" placeholder="Why is this the correct answer?" oninput="updateLivePreview()">${escapeHtml(q.explanation || '')}</textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Live Preview</label>
+      <div class="live-preview" id="livePreview"></div>
+    </div>
+
+    <div class="modal-footer">
+      ${!isNew ? `<button class="btn btn-danger btn-sm" onclick="confirmDeleteQuestion('${sid}','${cid}',${idx})">🗑️ Delete</button>` : ''}
+      <div style="flex:1"></div>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      ${isNew
+        ? `<button class="btn btn-outline btn-sm" onclick="saveQuestion('${sid}','${cid}',${idx},true)">💾 Save &amp; Add Another</button>
+           <button class="btn btn-primary btn-sm" onclick="saveQuestion('${sid}','${cid}',${idx},false)">💾 Save</button>`
+        : `<button class="btn btn-primary btn-sm" onclick="saveQuestion('${sid}','${cid}',${idx},false)">💾 Save Changes</button>`}
+    </div>
+  `);
+
+  setTimeout(() => {
+    document.getElementById('qText')?.focus();
+    updateLivePreview();
+  }, 100);
+
+  _modalKeyHandler = (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+      e.preventDefault();
+      saveQuestion(sid, cid, idx, isNew && e.shiftKey);
+    }
+  };
+  document.addEventListener('keydown', _modalKeyHandler);
+}
+
+function updateLivePreview(){
+  const preview = document.getElementById('livePreview');
+  if (!preview) return;
+  const qText = document.getElementById('qText')?.value || '';
+  const opts = [0, 1, 2, 3].map(i => document.getElementById('opt_' + i)?.value || '');
+  const ans = parseInt(document.getElementById('correctAnswer')?.value || '0', 10);
+  const exp = document.getElementById('qExplanation')?.value || '';
+
+  if (!qText.trim() && !opts.some(o => o.trim())){
+    preview.innerHTML = '<em>Start typing above — your question will appear here formatted as students will see it.</em>';
+    return;
+  }
+
+  preview.innerHTML = `
+    <div class="pv-q">${escapeHtml(qText) || '<em>(no question yet)</em>'}</div>
+    ${opts.map((o, i) => `
+      <div class="pv-opt ${i === ans ? 'correct' : ''}">
+        <span class="pv-letter">${String.fromCharCode(65 + i)}</span>
+        <span>${escapeHtml(o) || '<em>(empty)</em>'} ${i === ans ? ' ✓' : ''}</span>
+      </div>
+    `).join('')}
+    ${exp ? `<div style="margin-top:.5rem;padding-top:.5rem;border-top:1px dashed var(--border);font-size:.8rem;color:var(--text-light)"><strong>Explanation:</strong> ${escapeHtml(exp)}</div>` : ''}
+  `;
+}
+function selectAnswer(i){
+  document.getElementById('correctAnswer').value = i;
+  [0, 1, 2, 3].forEach(j => {
+    document.getElementById('letter_' + j)?.classList.toggle('selected', j === i);
+  });
+  updateLivePreview();
+}
+function saveQuestion(sid, cid, idx, addAnother){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+
+  const qText = document.getElementById('qText').value.trim();
+  const options = [0, 1, 2, 3].map(i => document.getElementById('opt_' + i).value.trim());
+  const answer = parseInt(document.getElementById('correctAnswer').value, 10);
+  const explanation = document.getElementById('qExplanation').value.trim();
+
+  if (!qText){ toast('Question text required', true); return; }
+  if (options.some(o => !o)){ toast('All 4 options required', true); return; }
+  if (!(answer >= 0 && answer <= 3)){ toast('Pick a correct answer', true); return; }
+
+  const newQ = { q: qText, options, answer, explanation };
+  if (idx >= 0) ch.questions[idx] = newQ;
+  else ch.questions.push(newQ);
+  saveData();
+
+  if (idx >= 0) syncQuizQuestion(sid, cid, idx, newQ);
+
+  if (addAnother){
+    toast('Saved ✓ — ready for next question');
+    openQuestionEditor(sid, cid, -1);
+  } else {
+    toast(idx >= 0 ? 'Question updated ✓' : 'Question added ✓');
+    closeModal();
+    render();
+  }
+}
+function syncQuizQuestion(sid, cid, origIdx, newQ){
+  quizQuestions = quizQuestions.map(qq => {
+    if (qq._sectionId === sid && qq._chapterId === cid && qq._origIdx === origIdx){
+      return { ...newQ, _sectionId: sid, _chapterId: cid, _origIdx: origIdx };
+    }
+    return qq;
+  });
+}
+function confirmDeleteQuestion(sid, cid, idx){
+  if (!confirm('Delete this question?')) return;
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  ch.questions.splice(idx, 1);
+  saveData();
+  toast('Question deleted');
+  closeModal();
+
+  if (currentView === 'practice' && quizMode === 'practice' && quizQuestions[0]?._chapterId === cid){
+    startPractice(sid, cid);
+  } else {
+    render();
+  }
+}
+
+/* ============================================================
+   BULK IMPORT
+   ============================================================ */
+function bulkImportQuestions(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  openModal(`
+    <div class="modal-header">
+      <h3>📥 Bulk Import Questions — ${escapeHtml(ch.title)}</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="help-box">
+      <strong>Format (one question per block):</strong><br>
+      <code>Q: Question text here?</code><br>
+      <code>A) Option A</code><br>
+      <code>B) Option B</code><br>
+      <code>C) Option C</code><br>
+      <code>D) Option D</code><br>
+      <code>Ans: B</code><br>
+      <code>Exp: Explanation text.</code><br><br>
+      Separate questions with a blank line or a line of <code>---</code>.
+    </div>
+    <div class="form-group">
+      <textarea class="form-textarea mono bulk" id="bulkInput" placeholder="Paste your questions here..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="bulkPaste()">📋 Paste</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="processBulkImport('${sid}','${cid}')">📥 Import</button>
+    </div>
+  `);
+}
+async function bulkPaste(){
+  const text = await pasteFromClipboard();
+  if (text === null) return;
+  document.getElementById('bulkInput').value = text;
+}
+function processBulkImport(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  const raw = document.getElementById('bulkInput').value;
+  if (!raw.trim()){ toast('Paste some questions first', true); return; }
+
+  const blocks = raw
+    .split(/\r?\n\s*\r?\n|\r?\n\s*-{3,}\s*\r?\n/)
+    .map(b => b.trim())
+    .filter(Boolean);
+
+  let added = 0, failed = 0;
+
+  blocks.forEach(block => {
+    const lines = block.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    if (!lines.length){ failed++; return; }
+
+    const qMatch = lines[0].match(/^Q\s*[).:\-]?\s*(.+)$/i);
+    const qText = qMatch ? qMatch[1].trim() : lines[0];
+
+    const options = ['', '', '', ''];
+    let answerIdx = -1;
+    let explanation = '';
+
+    lines.forEach(line => {
+      const optM = line.match(/^([A-D])\s*[).:\-]\s*(.+)$/i);
+      if (optM){
+        const i = 'ABCD'.indexOf(optM[1].toUpperCase());
+        if (options[i] === '') options[i] = optM[2].trim();
+        return;
+      }
+      const ansM = line.match(/^Ans(?:wer)?\s*[).:\-]?\s*([A-D])/i);
+      if (ansM){ answerIdx = 'ABCD'.indexOf(ansM[1].toUpperCase()); return; }
+      const expM = line.match(/^Exp(?:lanation)?\s*[).:\-]?\s*(.+)$/i);
+      if (expM){ explanation = expM[1].trim(); }
+    });
+
+    if (qText && options.every(o => o) && answerIdx >= 0 && answerIdx < 4){
+      ch.questions.push({ q: qText, options, answer: answerIdx, explanation });
+      added++;
+    } else {
+      failed++;
+    }
+  });
+
+  saveData();
+  toast(`Imported ${added} question${added !== 1 ? 's' : ''}${failed ? ', ' + failed + ' failed' : ''}`, failed > 0 && added === 0);
+  closeModal();
+  render();
+}
+
+/* ============================================================
+   PRACTICE MODE
+   ============================================================ */
+function startPractice(sid, cid){
+  const sec = DATA.find(s => s.id === sid);
+  const ch = sec?.chapters.find(c => c.id === cid);
+  if (!ch) return;
+  quizQuestions = ch.questions.map((q, i) => ({ ...q, _sectionId: sid, _chapterId: cid, _origIdx: i }));
+  quizIndex = 0;
+  quizAnswers = new Array(quizQuestions.length).fill(null);
+  quizMode = 'practice';
+  navigate('practice');
+}
+function renderPractice(){
+  if (!quizQuestions.length) return '<div class="empty">No questions</div>';
+  if (quizIndex >= quizQuestions.length) return renderPracticeResults();
+
+  const q = quizQuestions[quizIndex];
+  const chosen = quizAnswers[quizIndex];
+  const answered = chosen !== null;
+
+  return `
+    <div class="quiz-header">
+      <div class="quiz-progress">Question <strong>${quizIndex + 1}</strong> of <strong>${quizQuestions.length}</strong></div>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn btn-outline btn-sm" onclick="editQuestion('${q._sectionId}','${q._chapterId}',${q._origIdx})">✏️ Edit</button>
+        <button class="btn btn-outline btn-sm" onclick="navigate('chapter')">← Back</button>
+      </div>
+    </div>
+    <div class="question-card">
+      <span class="q-number">Q${quizIndex + 1}</span>
+      <p class="q-text">${escapeHtml(q.q)}</p>
+      <div class="options">
+        ${q.options.map((opt, i) => {
+          let cls = 'option';
+          if (answered){
+            cls += ' disabled';
+            if (i === q.answer) cls += ' correct';
+            else if (i === chosen) cls += ' incorrect';
+          }
+          return `<button class="${cls}" onclick="answerQuestion(${i})" ${answered ? 'disabled' : ''}>
+            <span class="letter">${String.fromCharCode(65 + i)}</span><span>${escapeHtml(opt)}</span>
+          </button>`;
+        }).join('')}
+      </div>
+      ${answered ? `
+        <div class="feedback ${chosen === q.answer ? '' : 'wrong'}">
+          <strong>${chosen === q.answer ? '✓ Correct!' : '✗ Incorrect. Correct answer: ' + String.fromCharCode(65 + q.answer)}</strong>
+          ${escapeHtml(q.explanation || '')}
+        </div>
+      ` : ''}
+    </div>
+    ${answered ? `
+      <div class="btn-row" style="justify-content:space-between">
+        <button class="btn btn-outline" onclick="prevQuestion()" ${quizIndex === 0 ? 'disabled' : ''}>← Previous</button>
+        <button class="btn btn-primary" onclick="nextQuestion()">${quizIndex === quizQuestions.length - 1 ? 'See Results →' : 'Next →'}</button>
+      </div>
+    ` : ''}
+
+    <button class="float-add" title="Quick-add a question to this chapter" onclick="addQuestionToChapter('${q._sectionId}','${q._chapterId}')">+</button>
+  `;
+}
+function answerQuestion(i){
+  if (quizAnswers[quizIndex] !== null) return;
+  quizAnswers[quizIndex] = i;
+  const q = quizQuestions[quizIndex];
+  markAnswered(q._sectionId, q._chapterId, q._origIdx, i === q.answer);
+  render();
+}
+function nextQuestion(){
+  if (quizIndex < quizQuestions.length){ quizIndex++; render(); }
+}
+function prevQuestion(){
+  if (quizIndex > 0){ quizIndex--; render(); }
+}
+function renderPracticeResults(){
+  const correct = quizAnswers.filter((a, i) => a === quizQuestions[i].answer).length;
+  const total = quizQuestions.length;
+  const pct = total ? Math.round(correct / total * 100) : 0;
+  const first = quizQuestions[0];
+  return `
+    <div class="card results-card">
+      <div class="score-circle"><span class="num">${pct}%</span><span class="lbl">Score</span></div>
+      <h2>${pct >= 80 ? 'Excellent! 🎉' : pct >= 60 ? 'Good job! 👍' : 'Keep practicing! 💪'}</h2>
+      <p class="subtitle">You got ${correct} out of ${total} correct.</p>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn btn-primary" onclick="startPractice('${first._sectionId}','${first._chapterId}')">🔄 Retry</button>
+        <button class="btn btn-secondary" onclick="navigate('chapter')">📖 Back to Chapter</button>
+        <button class="btn btn-outline" onclick="navigate('home')">🏠 Home</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   MOCK EXAM
+   ============================================================ */
+function startMock(numQuestions){
+  const all = [];
+  DATA.forEach(sec => sec.chapters.forEach(ch => {
+    ch.questions.forEach((q, i) => all.push({ ...q, _sectionId: sec.id, _chapterId: ch.id, _origIdx: i }));
+  }));
+  if (!all.length){ alert('No questions available yet.'); return; }
+
+  for (let i = all.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]];
+  }
+  const n = numQuestions || Math.min(150, all.length);
+  quizQuestions = all.slice(0, n);
+  quizIndex = 0;
+  quizAnswers = new Array(quizQuestions.length).fill(null);
+  quizMode = 'mock';
+  mockTimeLeft = quizQuestions.length * 60;
+
+  if (mockTimer){ clearInterval(mockTimer); mockTimer = null; }
+  navigate('mock');
+
+  mockTimer = setInterval(() => {
+    mockTimeLeft--;
+    const el = document.getElementById('mockTimer');
+    if (el){
+      el.textContent = formatTime(mockTimeLeft);
+      el.classList.toggle('warning', mockTimeLeft <= 60);
+    }
+    if (mockTimeLeft <= 0){
+      clearInterval(mockTimer);
+      mockTimer = null;
+      alert('Time is up!');
+      quizIndex = quizQuestions.length;
+      render();
+    }
+  }, 1000);
+}
+function formatTime(s){
+  const safe = Math.max(0, s);
+  const m = Math.floor(safe / 60);
+  const sec = safe % 60;
+  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+}
+function renderMock(){
+  if (!quizQuestions.length) return '<div class="empty">No questions</div>';
+  if (quizIndex >= quizQuestions.length){
+    if (mockTimer){ clearInterval(mockTimer); mockTimer = null; }
+    return renderMockResults();
+  }
+  const q = quizQuestions[quizIndex];
+  const chosen = quizAnswers[quizIndex];
+  return `
+    <div class="quiz-header">
+      <div class="quiz-progress">Question <strong>${quizIndex + 1}</strong> of <strong>${quizQuestions.length}</strong></div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <div class="timer" id="mockTimer">${formatTime(mockTimeLeft)}</div>
+        <button class="btn btn-danger btn-sm" onclick="endMock()">End</button>
+      </div>
+    </div>
+    <div class="question-card">
+      <span class="q-number">Q${quizIndex + 1}</span>
+      <p class="q-text">${escapeHtml(q.q)}</p>
+      <div class="options">
+        ${q.options.map((opt, i) => `
+          <button class="option ${i === chosen ? 'selected' : ''}" onclick="mockAnswer(${i})">
+            <span class="letter">${String.fromCharCode(65 + i)}</span><span>${escapeHtml(opt)}</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+    <div class="btn-row" style="justify-content:space-between">
+      <button class="btn btn-outline" onclick="prevQuestion()" ${quizIndex === 0 ? 'disabled' : ''}>← Previous</button>
+      <button class="btn btn-primary" onclick="nextQuestion()">${quizIndex === quizQuestions.length - 1 ? 'Finish →' : 'Next →'}</button>
+    </div>
+  `;
+}
+function endMock(){
+  if (!confirm('End exam and see results?')) return;
+  if (mockTimer){ clearInterval(mockTimer); mockTimer = null; }
+  quizIndex = quizQuestions.length;
+  render();
+}
+function mockAnswer(i){
+  quizAnswers[quizIndex] = i;
+  render();
+}
+function renderMockResults(){
+  const correct = quizAnswers.filter((a, i) => a === quizQuestions[i].answer).length;
+  const total = quizQuestions.length;
+  const pct = total ? Math.round(correct / total * 100) : 0;
+  const wrong = quizAnswers.filter((a, i) => a !== null && a !== quizQuestions[i].answer).length;
+  const skipped = quizAnswers.filter(a => a === null).length;
+  return `
+    <div class="card results-card">
+      <div class="score-circle"><span class="num">${pct}%</span><span class="lbl">Score</span></div>
+      <h2>Mock Exam Complete</h2>
+      <p class="subtitle">You scored ${correct} out of ${total}</p>
+      <div style="display:flex;gap:1.5rem;justify-content:center;margin:1.5rem 0;flex-wrap:wrap">
+        <div><strong style="color:var(--success);font-size:1.4rem">${correct}</strong><div style="font-size:.78rem;color:var(--text-light)">Correct</div></div>
+        <div><strong style="color:var(--danger);font-size:1.4rem">${wrong}</strong><div style="font-size:.78rem;color:var(--text-light)">Wrong</div></div>
+        <div><strong style="color:var(--text-light);font-size:1.4rem">${skipped}</strong><div style="font-size:.78rem;color:var(--text-light)">Skipped</div></div>
+      </div>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn btn-primary" onclick="startMock(${total})">🔄 New Mock</button>
+        <button class="btn btn-secondary" onclick="navigate('home')">🏠 Home</button>
+      </div>
+    </div>
+    <h2 style="margin-top:2rem">Review Answers</h2>
+    ${quizQuestions.map((q, i) => {
+      const chosen = quizAnswers[i];
+      return `
+        <div class="question-card">
+          <span class="q-number">Q${i + 1}</span>
+          <p class="q-text">${escapeHtml(q.q)}</p>
+          <div class="options">
+            ${q.options.map((opt, j) => {
+              let cls = 'option disabled';
+              if (j === q.answer) cls += ' correct';
+              else if (j === chosen) cls += ' incorrect';
+              return `<div class="${cls}"><span class="letter">${String.fromCharCode(65 + j)}</span><span>${escapeHtml(opt)}</span></div>`;
+            }).join('')}
+          </div>
+          <div class="feedback ${chosen === q.answer ? '' : 'wrong'}">
+            <strong>${chosen === q.answer ? '✓ Correct' : chosen === null ? '— Skipped' : '✗ Incorrect'}</strong>
+            ${escapeHtml(q.explanation || '')}
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+function searchQuestions(query){
+  if (!query || query.trim().length < 2){
+    if (currentView === 'search') navigate('home');
+    return;
+  }
+  const q = query.toLowerCase();
+  const results = [];
+  DATA.forEach(sec => sec.chapters.forEach(ch => {
+    ch.questions.forEach((question, i) => {
+      if (question.q.toLowerCase().includes(q) ||
+          question.options.some(o => o.toLowerCase().includes(q)) ||
+          (question.explanation || '').toLowerCase().includes(q)){
+        results.push({ sec, ch, question, idx: i });
+      }
+    });
+  }));
+  window._searchResults = results;
+  window._searchQuery = query;
+  currentView = 'search';
+  render();
+}
+function renderSearch(){
+  const results = window._searchResults || [];
+  const query = window._searchQuery || '';
+  if (!results.length){
+    return `<h1>Search</h1><p class="subtitle">No matches for "${escapeHtml(query)}"</p>
+      <div class="empty"><div class="em-icon">🔍</div><p>Try a different keyword.</p></div>`;
+  }
+  return `
+    <h1>Search Results</h1>
+    <p class="subtitle">${results.length} match${results.length === 1 ? '' : 'es'} for "${escapeHtml(query)}"</p>
+    ${results.map(r => `
+      <div class="search-result" onclick="openChapter('${r.sec.id}','${r.ch.id}')">
+        <div class="sr-loc">${r.sec.icon || ''} ${escapeHtml(r.sec.title)} › ${escapeHtml(r.ch.title)}</div>
+        <div class="sr-q">${escapeHtml(r.question.q)}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+/* ============================================================
+   SETTINGS MODAL
+   ============================================================ */
+function openSettings(){
+  openModal(`
+    <div class="modal-header">
+      <h3>⚙️ Settings &amp; Data</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="help-box">
+      Your content is saved automatically in this browser. Use <strong>Export</strong> to download an updated
+      <code>data.js</code> file — replace the one in your project folder to make changes permanent across devices.
+    </div>
+    <div class="btn-row" style="flex-direction:column;align-items:stretch">
+      <button class="btn btn-primary" onclick="exportDataJs()">📤 Export data.js (Download)</button>
+      <button class="btn btn-secondary" onclick="copyDataJs()">📋 Copy data.js to Clipboard</button>
+      <button class="btn btn-secondary" onclick="exportProgressJson()">💾 Export Progress (JSON)</button>
+      <button class="btn btn-outline" onclick="importDataDialog()">📥 Import data.js or Backup</button>
+      <button class="btn btn-danger" onclick="resetToDataJs()">🔄 Reset to Original data.js</button>
+    </div>
+    <div class="help-box" style="margin-top:1rem">
+      <strong>Current stats:</strong> ${DATA.length} sections ·
+      ${DATA.reduce((s, x) => s + x.chapters.length, 0)} chapters ·
+      ${DATA.reduce((s, x) => s + x.chapters.reduce((a, c) => a + c.questions.length, 0), 0)} questions
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button>
+    </div>
+  `);
+}
+function buildDataJsText(){
+  return '// ============================================================\n' +
+    '// NPC EXAM PREP — EXPORTED DATA\n' +
+    '// Generated: ' + new Date().toISOString() + '\n' +
+    '// Replace your data.js with this file to keep changes.\n' +
+    '// ============================================================\n\n' +
+    'const SECTIONS = ' + JSON.stringify(DATA, null, 2) + ';\n';
+}
+function exportDataJs(){
+  const blob = new Blob([buildDataJsText()], { type: 'text/javascript' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'data.js';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('data.js downloaded ✓');
+}
+function copyDataJs(){ copyToClipboard(buildDataJsText()); }
+function exportProgressJson(){
+  const blob = new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'npc-progress.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Progress exported ✓');
+}
+function importDataDialog(){
+  openModal(`
+    <div class="modal-header">
+      <h3>📥 Import Data</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="help-box">
+      Paste your full <code>data.js</code> content <em>OR</em> just the array that starts with <code>[{</code>.
+      You can also paste a previously exported JSON.
+    </div>
+    <div class="form-group">
+      <textarea class="form-textarea mono" id="importText" placeholder="Paste exported data.js content here..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="importFilePicker()">📁 Choose File</button>
+      <input type="file" id="importFile" style="display:none" accept=".js,.json,.txt" onchange="handleImportFile(event)">
+      <div style="flex:1"></div>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="processImport()">📥 Import</button>
+    </div>
+  `);
+}
+function importFilePicker(){ document.getElementById('importFile').click(); }
+function handleImportFile(e){
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { document.getElementById('importText').value = ev.target.result; };
+  reader.readAsText(file);
+}
+function processImport(){
+  const text = document.getElementById('importText').value.trim();
+  if (!text){ toast('Paste or choose a file first', true); return; }
+  try {
+    let parsed;
+    if (text.startsWith('[')){
+      parsed = JSON.parse(text);
+    } else {
+      const m = text.match(/SECTIONS\s*=\s*(\[[\s\S]*\])\s*;?\s*$/);
+      if (m){
+        parsed = JSON.parse(m[1]);
+      } else {
+        const s = text.indexOf('[');
+        const e2 = text.lastIndexOf(']');
+        if (s === -1 || e2 === -1) throw new Error('Could not find array data in file');
+        parsed = JSON.parse(text.slice(s, e2 + 1));
+      }
+    }
+    if (!Array.isArray(parsed)) throw new Error('Data must be an array');
+
+    parsed.forEach(sec => {
+      if (!sec.id || !sec.title || !Array.isArray(sec.chapters)) throw new Error('Invalid section entry');
+      sec.chapters.forEach(ch => {
+        if (!ch.id || !ch.title || !Array.isArray(ch.questions)) throw new Error('Invalid chapter entry');
+        ch.questions.forEach(q => {
+          if (!q.q || !Array.isArray(q.options) || typeof q.answer !== 'number') throw new Error('Invalid question entry');
+        });
+      });
+    });
+
+    DATA = parsed;
+    saveData();
+    toast('Imported ' + parsed.length + ' sections ✓');
+    closeModal();
+    renderSidebar();
+    navigate('home');
+  } catch(err){
+    toast('Import failed: ' + err.message, true);
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+loadData();
+renderSidebar();
+render();
+</script>
+</body>
+</html>
