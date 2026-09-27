@@ -690,7 +690,9 @@ function renderHome(){
         <strong style="color:var(--primary);">NPC Exam Prep</strong> · Nepal Pharmacy Council Exam Practice
       </p>
       <p>
-        <a href="https://wa.me/9779825484265" target="_blank" style="color:var(--primary);font-weight:600;text-decoration:none;">💬 Support</a>
+        <a href="javascript:void(0)" onclick="openAboutModal()" style="color:var(--primary);font-weight:600;text-decoration:none;">About</a>
+        &nbsp;·&nbsp;
+        <a href="https://wa.me/9779825484265" target="_blank" style="color:var(--primary);font-weight:600;text-decoration:none;">Support</a>
         &nbsp;·&nbsp;
         <a href="javascript:void(0)" onclick="openTermsModal()" style="color:var(--primary);font-weight:600;text-decoration:none;">Terms</a>
         &nbsp;·&nbsp;
@@ -2373,6 +2375,63 @@ render = function(){
   else title = 'NPC Exam Prep — Nepal Pharmacy Council';
   document.title = title;
 };
+
+/* ============================================================
+   ABOUT PAGE
+   ============================================================ */
+function openAboutModal(){
+  openModal(`
+    <div class="modal-header">
+      <h3>👤 About NPC Exam Prep</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div style="max-height:70vh;overflow-y:auto;font-size:.9rem;line-height:1.75;color:var(--text);padding-right:.5rem;">
+
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#0d7377,#14919b);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2.4rem;font-weight:700;margin:0 auto .75rem;">RC</div>
+        <h2 style="margin:0 0 .25rem;color:var(--primary);">Rajesh Chhetri</h2>
+        <p style="color:var(--text-light);font-size:.82rem;margin:0;">Founder &amp; Lead Developer</p>
+      </div>
+
+      <div class="help-box" style="background:var(--primary-light);border-left-color:var(--primary);">
+        <strong>Our Mission</strong><br>
+        To make quality exam preparation accessible and affordable for every pharmacy student in Nepal — no expensive coaching, no outdated materials, just clear, focused practice that works.
+      </div>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">👋 Hello, Namaste</h4>
+      <p>My name is Rajesh Chhetri, and I built NPC Exam Prep to solve a simple problem: pharmacy students preparing for the Nepal Pharmacy Council license exam needed a modern, mobile-friendly practice platform with questions that actually match the exam pattern.</p>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">🎯 What We Offer</h4>
+      <ul style="margin-left:1.2rem;">
+        <li><strong>Curated MCQs</strong> covering all major exam topics — pharmacology, pharmaceutics, pharmacognosy, forensic pharmacy, and more.</li>
+        <li><strong>Study Notes</strong> in a clean, easy-to-read format.</li>
+        <li><strong>Mock Exams</strong> that simulate the real NPC exam environment.</li>
+        <li><strong>Instant Feedback</strong> with explanations for every question.</li>
+        <li><strong>Leaderboard</strong> to track where you stand.</li>
+        <li><strong>Certificates</strong> for students who score 60% or above.</li>
+      </ul>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">💡 Why Free &amp; Paid?</h4>
+      <p>The <strong>Free Plan</strong> gives every student access to essential practice material — enough to get started. The <strong>Paid Plan (NPR 500 one-time)</strong> unlocks the full question bank and unlimited mock exams for students who want to go deeper. The one-time fee keeps the platform running without ads or subscriptions.</p>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">📬 Get in Touch</h4>
+      <p>
+        <strong>WhatsApp:</strong>
+        <a href="https://wa.me/9779825484265" target="_blank" style="color:var(--primary);font-weight:600;">+977 9825484265</a><br>
+        <strong>Email:</strong> kjhon1523@gmail.com
+      </p>
+      <p style="margin-top:.75rem;">For support, suggestions, or to report a wrong question, message us anytime — we usually reply within a few hours.</p>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">🙏 Thank You</h4>
+      <p>Every student who uses this platform, shares it with friends, or sends feedback helps make it better for the next person. If NPC Exam Prep helped you pass, we'd love to hear about it.</p>
+
+      <p style="margin-top:1.5rem;font-size:.82rem;color:var(--text-light);text-align:center;font-style:italic;">— Built with care in Nepal 🇳🇵</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button>
+    </div>
+  `);
+}
 
 /* ============================================================
    TERMS & PRIVACY
