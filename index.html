@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NPC Exam Prep — Nepal Pharmacy Council Pharmacist License</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+<meta name="description" content="Free MCQ practice and mock exams for the Nepal Pharmacy Council Pharmacist License Examination.">
+<meta name="theme-color" content="#0d7377">
 <style>
 :root{
   --primary:#0d7377;--primary-dark:#095052;--primary-light:#e6f4f5;
@@ -642,7 +645,7 @@ function renderHome(){
   return `
     <div class="hero">
       <h1>💊 Nepal Pharmacy Council Exam Prep</h1>
-      <p>Pharmacist License Examination (B.Pharm) — Practice MCQs, study notes, and full mock exams.</p>
+      <p>Free practice platform for the Nepal Pharmacy Council Pharmacist License Exam. Study smart, test yourself, and get exam-ready.</p>
       <div class="hero-stats">
         <div class="hero-stat"><strong>${totalQ}</strong><span>Questions</span></div>
         <div class="hero-stat"><strong>${totalCh}</strong><span>Chapters</span></div>
@@ -682,6 +685,17 @@ function renderHome(){
     </div>
 
     <div id="leaderboardSection"></div>
+
+    <div style="text-align:center;padding:2rem 1rem 1rem;font-size:.8rem;color:var(--text-light);border-top:1px solid var(--border);margin-top:2rem;">
+      <p style="margin-bottom:.5rem;">
+        <strong style="color:var(--primary);">NPC Exam Prep</strong> · Nepal Pharmacy Council Exam Practice
+      </p>
+      <p>
+        <a href="https://wa.me/9779825484265" target="_blank" style="color:var(--primary);font-weight:600;text-decoration:none;">💬 WhatsApp Support</a>
+        &nbsp;·&nbsp;
+        <span>© ${new Date().getFullYear()} Rajesh Chhetri</span>
+      </p>
+    </div>
   `;
 }
 function continueWhereLeft(){
@@ -1630,6 +1644,11 @@ function openSettings(){
     <div class="help-box" style="margin-top:1rem">
       <strong>Current stats:</strong> ${DATA.length} sections · ${DATA.reduce((s,x)=>s+x.chapters.length,0)} chapters · ${DATA.reduce((s,x)=>s+x.chapters.reduce((a,c)=>a+c.questions.length,0),0)} questions
     </div>
+    <div class="help-box" style="margin-top:1rem;background:rgba(37,211,102,.1);border-left-color:#25D366;">
+      <strong>💬 Need help?</strong><br>
+      WhatsApp: <a href="https://wa.me/9779825484265" target="_blank" style="color:var(--primary);font-weight:600;">+977 9825484265</a><br>
+      We reply within a few hours.
+    </div>
     <div class="modal-footer"><button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button></div>
   `);
 }
@@ -2288,6 +2307,21 @@ render();
 
 updateUserUI();
 refreshUserPlan(true);
+
+/* ============================================================
+   DYNAMIC PAGE TITLE — updates per view
+   ============================================================ */
+const _origRender = render;
+render = function(){
+  _origRender();
+  let title = 'NPC Exam Prep';
+  if (currentView === 'chapter' && currentChapter) title = currentChapter.title + ' — NPC Exam Prep';
+  else if (currentView === 'practice') title = 'Practice — NPC Exam Prep';
+  else if (currentView === 'mock') title = 'Mock Exam — NPC Exam Prep';
+  else if (currentView === 'search') title = 'Search — NPC Exam Prep';
+  else title = 'NPC Exam Prep — Nepal Pharmacy Council';
+  document.title = title;
+};
 
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden) refreshUserPlan();
