@@ -364,7 +364,7 @@ const DATA_VERSION = 'v1_2026_04';
 let DATA = null;
 let _modalKeyHandler = null;
 
-/* Global app state (declared up here so nothing is used before initialization) */
+/* Global app state */
 let currentView = 'home';
 let currentSection = null;
 let currentChapter = null;
@@ -1535,6 +1535,7 @@ function renderMockResults(){
         <div><strong style="color:var(--text-light);font-size:1.4rem">${skipped}</strong><div style="font-size:.78rem;color:var(--text-light)">Skipped</div></div>
       </div>
       <div class="btn-row" style="justify-content:center">
+        ${(pct >= 60 && getSession()) ? `<button class="btn" style="background:linear-gradient(135deg,#f4a261,#e76f51);color:#fff;" onclick="openCertificate()">📜 Download Certificate</button>` : ''}
         <button class="btn btn-primary" onclick="startMock(${total})">🔄 New Mock</button>
         <button class="btn btn-secondary" onclick="navigate('home')">🏠 Home</button>
       </div>
@@ -2059,6 +2060,150 @@ async function openAdminDashboard() {
     `;
     openModal(html);
   } catch(e){ toast("Failed: " + e.message, true); }
+}
+
+/* ============================================================
+   CERTIFICATE GENERATION
+   ============================================================ */
+function openCertificate() {
+  const user = getSession();
+  if (!user) { toast("Please login to download certificate", true); return; }
+
+  const correct = quizAnswers.filter((a, i) => a === quizQuestions[i].answer).length;
+  const total = quizQuestions.length;
+  const pct = total ? Math.round(correct / total * 100) : 0;
+
+  if (pct < 60) { toast("Certificate requires 60% or above", true); return; }
+
+  const studentName = user.name || "Student";
+  const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+  const certId = 'NPC-' + Date.now().toString(36).toUpperCase();
+
+  const w = window.open('', '_blank');
+  if (!w) { toast("Popup blocked — allow popups and try again", true); return; }
+
+  w.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Certificate — ${escapeHtml(studentName)}</title>
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; background: #e8ecef; padding: 20px;
+  }
+  .cert {
+    width: 210mm; height: 297mm; background: #fdfcf7; padding: 20mm;
+    position: relative; box-shadow: 0 4px 30px rgba(0,0,0,.15);
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  }
+  .outer-border { position: absolute; inset: 10mm; border: 3px solid #0d7377; border-radius: 8px; pointer-events: none; }
+  .inner-border { position: absolute; inset: 13mm; border: 1px solid #0d7377; border-radius: 6px; pointer-events: none; }
+  .corner { position: absolute; width: 30px; height: 30px; border: 3px solid #f4a261; }
+  .corner.tl { top: 10mm; left: 10mm; border-right: 0; border-bottom: 0; }
+  .corner.tr { top: 10mm; right: 10mm; border-left: 0; border-bottom: 0; }
+  .corner.bl { bottom: 10mm; left: 10mm; border-right: 0; border-top: 0; }
+  .corner.br { bottom: 10mm; right: 10mm; border-left: 0; border-top: 0; }
+  .content { position: relative; z-index: 1; text-align: center; width: 100%; padding: 10mm 0; }
+  .logo { font-size: 42px; margin-bottom: 8px; }
+  .brand { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; letter-spacing: 6px; color: #0d7377; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; }
+  .sub-brand { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; letter-spacing: 3px; color: #5a6b7c; text-transform: uppercase; margin-bottom: 40px; }
+  .title { font-size: 46px; color: #0d7377; letter-spacing: 3px; margin-bottom: 10px; font-weight: 400; }
+  .subtitle-line { width: 60px; height: 2px; background: #f4a261; margin: 0 auto 30px; }
+  .certifies { font-size: 16px; color: #5a6b7c; font-style: italic; margin-bottom: 25px; }
+  .student-name { font-size: 52px; color: #1a2b3c; font-weight: 700; margin: 20px 0; padding: 0 20mm; line-height: 1.15; word-break: break-word; }
+  .name-line { width: 70%; margin: 8px auto 25px; height: 1px; background: #dce6ed; }
+  .for-passing { font-size: 15px; color: #5a6b7c; line-height: 1.7; max-width: 140mm; margin: 0 auto 25px; }
+  .for-passing strong { color: #0d7377; font-weight: 600; }
+  .score-box { display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #0d7377, #14919b); color: #fff; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 6px 20px rgba(13,115,119,.25); }
+  .score-box .label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: .9; margin-bottom: 4px; }
+  .score-box .value { font-size: 34px; font-weight: 700; line-height: 1; }
+  .details { display: flex; justify-content: space-between; width: 70%; margin: 30px auto 0; font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; color: #5a6b7c; }
+  .details > div { text-align: center; }
+  .details .small-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #9fb0bd; margin-bottom: 6px; }
+  .details .value2 { font-weight: 600; color: #1a2b3c; padding-bottom: 4px; border-bottom: 1px solid #dce6ed; min-width: 40mm; }
+  .footer { position: relative; z-index: 1; text-align: center; width: 100%; padding-top: 20px; }
+  .signature { font-family: 'Brush Script MT', 'Segoe Script', cursive; font-size: 38px; color: #0d7377; margin-bottom: 4px; line-height: 1; }
+  .signature-line { width: 60mm; height: 1px; background: #1a2b3c; margin: 0 auto 6px; }
+  .signature-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; color: #5a6b7c; letter-spacing: 1px; }
+  .cert-id { position: absolute; bottom: 15mm; right: 20mm; font-family: 'Courier New', monospace; font-size: 9px; color: #9fb0bd; letter-spacing: 1px; }
+  .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg); font-size: 180px; color: rgba(13,115,119,.04); z-index: 0; pointer-events: none; font-weight: 700; letter-spacing: 10px; }
+  .print-bar { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #0d7377; color: #fff; padding: 12px 24px; border-radius: 50px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; box-shadow: 0 4px 16px rgba(0,0,0,.2); display: flex; gap: 12px; align-items: center; z-index: 999; }
+  .print-bar button { background: #fff; color: #0d7377; border: none; padding: 8px 18px; border-radius: 50px; font-weight: 700; cursor: pointer; font-size: 13px; font-family: inherit; }
+  .print-bar button:hover { background: #f4a261; color: #fff; }
+  @media print {
+    body { background: #fff; padding: 0; display: block; }
+    .cert { box-shadow: none; margin: 0; }
+    .print-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="print-bar">
+    <span>📜 Your certificate is ready</span>
+    <button onclick="window.print()">🖨️ Save as PDF / Print</button>
+    <button onclick="window.close()" style="background:rgba(255,255,255,.2);color:#fff;">✕ Close</button>
+  </div>
+
+  <div class="cert">
+    <div class="outer-border"></div>
+    <div class="inner-border"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    <div class="watermark">NPC</div>
+
+    <div class="content">
+      <div class="logo">💊</div>
+      <div class="brand">NPC Exam Prep</div>
+      <div class="sub-brand">Nepal Pharmacy Council</div>
+
+      <h1 class="title">Certificate</h1>
+      <div class="subtitle-line"></div>
+
+      <p class="certifies">This is to certify that</p>
+
+      <div class="student-name">${escapeHtml(studentName)}</div>
+      <div class="name-line"></div>
+
+      <p class="for-passing">
+        has successfully passed the <strong>Mock Examination</strong><br>
+        for the Nepal Pharmacy Council Pharmacist License<br>
+        with a score of
+      </p>
+
+      <div class="score-box">
+        <div class="label">Score</div>
+        <div class="value">${pct}%</div>
+      </div>
+
+      <div class="details">
+        <div>
+          <div class="small-label">Date Issued</div>
+          <div class="value2">${today}</div>
+        </div>
+        <div>
+          <div class="small-label">Questions</div>
+          <div class="value2">${correct} / ${total}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="signature">Rajesh Chhetri</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Authorized Signatory · NPC Exam Prep</div>
+    </div>
+
+    <div class="cert-id">Cert ID: ${certId}</div>
+  </div>
+</body>
+</html>`);
+  w.document.close();
 }
 
 async function approveAdminUser(email) {
