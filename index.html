@@ -692,6 +692,8 @@ function renderHome(){
       <p>
         <a href="javascript:void(0)" onclick="openAboutModal()" style="color:var(--primary);font-weight:600;text-decoration:none;">About</a>
         &nbsp;·&nbsp;
+        <a href="javascript:void(0)" onclick="openHelpModal()" style="color:var(--primary);font-weight:600;text-decoration:none;">FAQ</a>
+        &nbsp;·&nbsp;
         <a href="https://wa.me/9779825484265" target="_blank" style="color:var(--primary);font-weight:600;text-decoration:none;">Support</a>
         &nbsp;·&nbsp;
         <a href="javascript:void(0)" onclick="openTermsModal()" style="color:var(--primary);font-weight:600;text-decoration:none;">Terms</a>
@@ -2406,6 +2408,143 @@ render = function(){
   else title = 'NPC Exam Prep — Nepal Pharmacy Council';
   document.title = title;
 };
+
+/* ============================================================
+   HELP & FAQ MODAL
+   ============================================================ */
+function openHelpModal(){
+  openModal(`
+    <div class="modal-header">
+      <h3>❓ Help &amp; FAQ</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+
+    <div style="max-height:70vh;overflow-y:auto;font-size:.88rem;line-height:1.7;color:var(--text);padding-right:.5rem;">
+
+      <div class="help-box" style="background:linear-gradient(135deg,rgba(13,115,119,.1),rgba(20,145,155,.05));border-left-color:var(--primary);">
+        <strong>💬 Still have a question?</strong><br>
+        Message us on WhatsApp: <a href="https://wa.me/9779825484265" target="_blank" style="color:var(--primary);font-weight:600;">+977 9825484265</a><br>
+        We usually reply within a few hours.
+      </div>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">📚 About the Platform</h4>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">What is NPC Exam Prep?</summary>
+        <p style="margin-top:.5rem;">A free practice platform for students preparing for the Nepal Pharmacy Council Pharmacist License Examination. We offer MCQs, study notes, mock exams, and certificates.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Is this an official NPC platform?</summary>
+        <p style="margin-top:.5rem;">No. NPC Exam Prep is an independent study resource. We are <strong>not affiliated with the Nepal Pharmacy Council</strong> or any government body. We're here to help you practice, not to replace official materials.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Is it really free?</summary>
+        <p style="margin-top:.5rem;">Yes! The <strong>Free Plan</strong> gives you access to practice questions and 10-question mock exams. The <strong>Paid Plan (NPR 500, one-time)</strong> unlocks everything — all questions, unlimited 150-question mock exams, and certificates.</p>
+      </details>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">👤 Account &amp; Login</h4>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">I forgot my password. What do I do?</summary>
+        <p style="margin-top:.5rem;">Click <strong>👤 → "Forgot password?"</strong> → enter your email → check your inbox for a temporary password. Login with that, then change it from your profile.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Can I share my account with a friend?</summary>
+        <p style="margin-top:.5rem;">No. Each account is for one person. Sharing accounts or your password may result in permanent suspension. If a friend wants access, ask them to register — the Free plan is generous.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">My session logged me out automatically. Why?</summary>
+        <p style="margin-top:.5rem;">For security, sessions expire after 30 days of inactivity. Simply log in again — your progress is saved.</p>
+      </details>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">💳 Payment &amp; Upgrade</h4>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">How do I upgrade to Paid?</summary>
+        <p style="margin-top:.5rem;">Click <strong>⭐ Upgrade to Paid</strong> → scan the eSewa QR code → pay <strong>NPR 500</strong> → take a screenshot → click the WhatsApp button → send us the screenshot. We verify within a few minutes and unlock your account.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">I paid but my account is still Free. Why?</summary>
+        <p style="margin-top:.5rem;">Verification is manual. It usually takes a few minutes but can take up to a few hours during busy times. Make sure you sent the payment screenshot on WhatsApp. If more than 3 hours have passed, message us again.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Can I get a refund?</summary>
+        <p style="margin-top:.5rem;">Since access is granted immediately and content can be copied, <strong>we do not offer refunds</strong> once your account is upgraded. If a specific question is wrong, we'll fix it and offer credit toward another section.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">The price is NPR 500 — is it monthly?</summary>
+        <p style="margin-top:.5rem;"><strong>No — it's a one-time payment.</strong> Pay once, access forever. No subscriptions, no hidden fees.</p>
+      </details>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">📝 Content &amp; Questions</h4>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">I found a wrong question/answer. How do I report it?</summary>
+        <p style="margin-top:.5rem;">Message us on WhatsApp with:
+        <br>1. The chapter name
+        <br>2. The question number (Q1, Q2, etc.)
+        <br>3. What's wrong
+        <br>We review and fix reports within 24 hours.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Why do some questions repeat across chapters?</summary>
+        <p style="margin-top:.5rem;">Some topics overlap between subjects (e.g., drug interactions appear in both Pharmacology and Clinical Pharmacy). This reinforces important concepts, which helps during the actual exam.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Can I download the study notes?</summary>
+        <p style="margin-top:.5rem;">Yes — open any chapter → click <strong>"📋 Copy Notes"</strong> → paste into Word, Google Docs, or any notes app. For a PDF, use your browser's print feature (Ctrl+P → Save as PDF).</p>
+      </details>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">🏆 Certificates &amp; Leaderboard</h4>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">How do I get a certificate?</summary>
+        <p style="margin-top:.5rem;">Score <strong>60% or above</strong> on any mock exam. A "📜 Download Certificate" button will appear on the results page. Click it → click "Save as PDF / Print" → save the certificate to your computer or phone.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Is the certificate officially recognized?</summary>
+        <p style="margin-top:.5rem;">The certificate is for personal motivation and portfolio use. It is <strong>not</strong> an official NPC qualification. Only the Nepal Pharmacy Council can issue the pharmacist license.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">How does the leaderboard work?</summary>
+        <p style="margin-top:.5rem;">Your best score from all your mock exams appears on the home page's "Top Scorers" list. Only the top 10 are shown. Your name is abbreviated for privacy (e.g., "Rajesh C.").</p>
+      </details>
+
+      <h4 style="color:var(--primary);margin:1.25rem 0 .5rem;">🔒 Privacy &amp; Data</h4>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Who can see my email or password?</summary>
+        <p style="margin-top:.5rem;">No one — not even us. Your password is hashed using SHA-256 before storage. Your email is used only for login and to send you important notifications. See our <a href="javascript:void(0)" onclick="closeModal(); openPrivacyModal();" style="color:var(--primary);font-weight:600;">Privacy Policy</a> for details.</p>
+      </details>
+
+      <details style="margin-bottom:.75rem;padding:.75rem 1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <summary style="font-weight:600;cursor:pointer;color:var(--primary-dark);">Can I delete my account?</summary>
+        <p style="margin-top:.5rem;">Yes. Message us on WhatsApp with your registered email and we'll delete your data within 48 hours.</p>
+      </details>
+
+      <div class="help-box" style="margin-top:1.5rem;background:linear-gradient(135deg,rgba(37,211,102,.1),rgba(37,211,102,.05));border-left-color:#25D366;">
+        <strong>🙋 Didn't find your answer?</strong><br>
+        WhatsApp us: <a href="https://wa.me/9779825484265" target="_blank" style="color:#25D366;font-weight:700;">+977 9825484265</a>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button>
+    </div>
+  `);
+}
 
 /* ============================================================
    ABOUT PAGE
