@@ -691,7 +691,10 @@ function navigate(view){
 }
 function render(){
   const main = document.getElementById('mainContent');
-  if (currentView === 'home') main.innerHTML = renderHome();
+  if (currentView === 'home') {
+    main.innerHTML = renderHome();
+    loadLeaderboard();
+  }
   else if (currentView === 'chapter') main.innerHTML = renderChapter();
   else if (currentView === 'practice') main.innerHTML = renderPractice();
   else if (currentView === 'mock') main.innerHTML = renderMock();
@@ -763,6 +766,8 @@ function renderHome(){
         `;
       }).join('')}
     </div>
+
+    <div id="leaderboardSection"></div>
   `;
 }
 function continueWhereLeft(){
@@ -1977,6 +1982,10 @@ async function saveScore(email, score, total, percentage) {
   });
 }
 
+async function getLeaderboard() {
+  return await callBackend({ action: "getLeaderboard" });
+}
+
   // Called automatically when a mock exam ends.
 // Sends score, total, and percentage to Google Sheet.
 async function finalizeMockScore() {
@@ -2380,6 +2389,67 @@ async function openAdminDashboard() {
     openModal(html);
   } catch(e) {
     toast("Failed to load dashboard: " + e.message, true);
+  }
+}
+
+/* ============================================================
+   LEADERBOARD (Option B)
+   ============================================================ */
+function formatLeaderboardName(fullName) {
+  if (!fullName) return "Anonymous";
+  const parts = String(fullName).trim().split(/\s+/);
+  if (parts.length === 1) return parts[0];
+  return parts[0] + " " + parts[parts.length - 1].charAt(0).toUpperCase() + ".";
+}
+
+async function loadLeaderboard() {
+  const container = document.getElementById('leaderboardSection');
+  if (!container) return;
+
+  try {
+    const res = await getLeaderboard();
+
+    if (res.result !== "success" || !res.leaderboard || res.leaderboard.length === 0) {
+      container.innerHTML = `
+        <h2 style="margin-top:2rem;">🏆 Top Scorers</h2>
+        <p class="subtitle">No scores yet — be the first to top the leaderboard!</p>
+      `;
+      return;
+    }
+
+    const medals = ["🥇", "🥈", "🥉"];
+    const rows = res.leaderboard.map((u, i) => {
+      const rank = i < 3 ? medals[i] : (i + 1);
+      const name = formatLeaderboardName(u.name);
+      const pctColor = u.pct >= 80 ? 'var(--success)' : u.pct >= 60 ? 'var(--accent)' : 'var(--text)';
+      const rowBg = i === 0 ? 'rgba(244,162,97,.12)' : 'var(--card)';
+      const rowBorder = i === 0 ? 'rgba(244,162,97,.5)' : 'var(--border)';
+      return `
+        <div style="display:flex;align-items:center;gap:.75rem;padding:.7rem .9rem;background:${rowBg};border:1px solid ${rowBorder};border-radius:10px;margin-bottom:.4rem;">
+          <div style="font-size:1.2rem;min-width:2.2rem;text-align:center;font-weight:700;">${rank}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              ${escapeHtml(name)}
+            </div>
+            <div style="font-size:.72rem;color:var(--text-light);">
+              ${u.score}/${u.total} · ${formatAdminTime(u.timestamp)}
+            </div>
+          </div>
+          <div style="font-size:1.1rem;font-weight:700;color:${pctColor};">
+            ${u.pct}%
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <h2 style="margin-top:2rem;">🏆 Top Scorers</h2>
+      <p class="subtitle">Best score from each student's mock exams. Take a mock to get on the board!</p>
+      ${rows}
+    `;
+  } catch (e) {
+    console.error("Leaderboard load failed:", e);
+    container.innerHTML = '';
   }
 }
 
