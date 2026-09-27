@@ -455,12 +455,8 @@ async function pasteFromClipboard(){
 /* ============================================================
    ADMIN CONTROL
    ============================================================ */
-const ADMIN_EMAILS = ["kjhon1523@gmail.com"];
-
 function isAdmin(user){
-  if (!user || !user.email) return false;
-  const email = user.email.toLowerCase().trim();
-  return ADMIN_EMAILS.some(a => a.toLowerCase().trim() === email);
+  return !!(user && user.role === 'admin');
 }
 function requireAdmin(){
   if (!isAdmin(getSession())){ toast('Admin access required', true); return false; }
