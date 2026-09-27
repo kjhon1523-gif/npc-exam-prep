@@ -406,9 +406,27 @@ h2{font-size:1.25rem;font-weight:700;color:var(--text);margin-bottom:1rem}
 <script src="data.js"></script>
 <script>
 /* ============================================================
+   SAFETY GUARD — data.js must load first
+   ============================================================ */
+if (typeof SECTIONS === 'undefined') {
+  document.body.innerHTML =
+    '<div style="padding:3rem;font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;text-align:center;">' +
+      '<div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>' +
+      '<h1 style="color:#e76f51;margin-bottom:1rem;">data.js failed to load</h1>' +
+      '<p style="color:#5a6b7c;line-height:1.7;">Make sure <code>data.js</code> sits in the same folder as <code>index.html</code> and defines a global <code>SECTIONS</code> array.</p>' +
+      '<p style="color:#5a6b7c;margin-top:1rem;font-size:.9rem;">Open the browser console for details.</p>' +
+    '</div>';
+  throw new Error('data.js missing — app cannot start');
+}
+
+/* ============================================================
    DATA LAYER — localStorage + data.js merge
    ============================================================ */
 const DATA_KEY = 'npc_data_v3';
+
+// 👇 BUMP THIS when you push an updated data.js to GitHub Pages.
+// Existing users will auto-refresh their local content on next load.
+const DATA_VERSION = 'v1_2026_04';
 
 let DATA = null;
 let _modalKeyHandler = null;
@@ -420,18 +438,24 @@ function loadData(){
   if (stored){
     try {
       const parsed = JSON.parse(stored);
-      DATA = Array.isArray(parsed) && parsed.length ? parsed : deepClone(SECTIONS);
-    } catch(e){
-      DATA = deepClone(SECTIONS);
-    }
-  } else {
-    DATA = deepClone(SECTIONS);
-    saveData();
+      // Auto-refresh: if the stored version differs from the current one,
+      // replace local content with fresh SECTIONS (for content updates).
+      if (parsed && parsed._v === DATA_VERSION && Array.isArray(parsed.sections) && parsed.sections.length) {
+        DATA = parsed.sections;
+        return;
+      }
+      // Fall through → use fresh data.js
+    } catch(e){ /* fall through */ }
   }
+  DATA = deepClone(SECTIONS);
+  saveData();
 }
 function saveData(){
   try {
-    localStorage.setItem(DATA_KEY, JSON.stringify(DATA));
+    localStorage.setItem(DATA_KEY, JSON.stringify({
+      _v: DATA_VERSION,
+      sections: DATA
+    }));
   } catch(e){
     toast('Storage full! Export your data and clear browser storage.', true);
   }
@@ -529,7 +553,11 @@ function openModal(html){
 }
 function closeModal(){
   document.getElementById('modal').classList.remove('show');
-  document.body.style.overflow = '';
+  // Only unlock scroll if no other modal is open
+  if (!document.getElementById('authModal').classList.contains('show') &&
+      !document.getElementById('upgradeModal').classList.contains('show')){
+    document.body.style.overflow = '';
+  }
   if (_modalKeyHandler){
     document.removeEventListener('keydown', _modalKeyHandler);
     _modalKeyHandler = null;
@@ -557,10 +585,6 @@ function getVisibleQuestions(chapter, user){
   const all = (chapter && chapter.questions) || [];
   if (isAdmin(user) || !isFreePlan(user)) return all;
   return all.slice(0, FREE_QUESTION_LIMIT);
-}
-function handleUpgradeClick(){
-  if (getSession()) openProfileModal();
-  else openAuthModal();
 }
 
 /* ============================================================
@@ -2055,7 +2079,10 @@ function openAuthModal() {
 }
 function closeAuthModal() {
   document.getElementById("authModal").classList.remove("show");
-  document.body.style.overflow = "";
+  if (!document.getElementById("modal").classList.contains("show") &&
+      !document.getElementById("upgradeModal").classList.contains("show")){
+    document.body.style.overflow = "";
+  }
 }
 function switchAuthTab(tab) {
   document.getElementById("tabLogin").classList.toggle("active", tab === "login");
@@ -2065,12 +2092,17 @@ function switchAuthTab(tab) {
   document.getElementById("authTitle").textContent = tab === "login" ? "👤 Login" : "👤 Register";
 }
 
+function isValidEmail(email){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim());
+}
+
 async function doRegister() {
   const name = document.getElementById("regName").value.trim();
   const email = document.getElementById("regEmail").value.trim();
   const password = document.getElementById("regPassword").value;
 
   if (!name || !email || !password) { toast("Fill all fields", true); return; }
+  if (!isValidEmail(email)) { toast("Enter a valid email address", true); return; }
   if (password.length < 6) { toast("Password must be 6+ characters", true); return; }
 
   const res = await registerUser(name, email, password);
@@ -2091,6 +2123,7 @@ async function doLogin() {
   const password = document.getElementById("loginPassword").value;
 
   if (!email || !password) { toast("Enter email and password", true); return; }
+  if (!isValidEmail(email)) { toast("Enter a valid email address", true); return; }
 
   const res = await loginUser(email, password);
   if (res.result === "success") {
@@ -2152,7 +2185,7 @@ function openProfileModal() {
       <div class="help-box">
         <strong>Upgrade to Paid</strong> — get access to all questions and full mock exams.
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="openUpgradeModal(); closeModal();">
+      <button class="btn btn-primary" style="width:100%;" onclick="closeModal(); openUpgradeModal();">
         ⭐ Upgrade to Paid (NPR 500)
       </button>
     ` : ''}
@@ -2199,7 +2232,10 @@ function openUpgradeModal() {
 
 function closeUpgradeModal() {
   document.getElementById("upgradeModal").classList.remove("show");
-  document.body.style.overflow = "";
+  if (!document.getElementById("modal").classList.contains("show") &&
+      !document.getElementById("authModal").classList.contains("show")){
+    document.body.style.overflow = "";
+  }
 }
 
 async function sendWhatsAppProof() {
@@ -2226,9 +2262,12 @@ async function sendWhatsAppProof() {
 /* ============================================================
    REFRESH USER PLAN + ROLE FROM BACKEND
    ============================================================ */
-async function refreshUserPlan() {
+let _lastPlanRefresh = 0;
+async function refreshUserPlan(force) {
   const user = getSession();
   if (!user || !user.email) return;
+  if (!force && Date.now() - _lastPlanRefresh < 30000) return;
+  _lastPlanRefresh = Date.now();
 
   try {
     const res = await callBackend({ action: "getUser", email: user.email });
@@ -2250,7 +2289,7 @@ async function refreshUserPlan() {
 }
 
 /* ============================================================
-   ADMIN DASHBOARD (Phase 2)
+   ADMIN DASHBOARD
    ============================================================ */
 function formatAdminTime(timestamp) {
   if (!timestamp) return "unknown";
@@ -2393,8 +2432,11 @@ async function openAdminDashboard() {
 }
 
 /* ============================================================
-   LEADERBOARD (Option B)
+   LEADERBOARD (with 60s cache)
    ============================================================ */
+let _lbCache = null;
+let _lbCacheAt = 0;
+
 function formatLeaderboardName(fullName) {
   if (!fullName) return "Anonymous";
   const parts = String(fullName).trim().split(/\s+/);
@@ -2402,18 +2444,27 @@ function formatLeaderboardName(fullName) {
   return parts[0] + " " + parts[parts.length - 1].charAt(0).toUpperCase() + ".";
 }
 
-async function loadLeaderboard() {
+async function loadLeaderboard(force) {
   const container = document.getElementById('leaderboardSection');
   if (!container) return;
+
+  // Use cache if fresh and not forced
+  if (!force && _lbCache && Date.now() - _lbCacheAt < 60000) {
+    container.innerHTML = _lbCache;
+    return;
+  }
 
   try {
     const res = await getLeaderboard();
 
     if (res.result !== "success" || !res.leaderboard || res.leaderboard.length === 0) {
-      container.innerHTML = `
+      const html = `
         <h2 style="margin-top:2rem;">🏆 Top Scorers</h2>
         <p class="subtitle">No scores yet — be the first to top the leaderboard!</p>
       `;
+      container.innerHTML = html;
+      _lbCache = html;
+      _lbCacheAt = Date.now();
       return;
     }
 
@@ -2442,11 +2493,14 @@ async function loadLeaderboard() {
       `;
     }).join('');
 
-    container.innerHTML = `
+    const html = `
       <h2 style="margin-top:2rem;">🏆 Top Scorers</h2>
       <p class="subtitle">Best score from each student's mock exams. Take a mock to get on the board!</p>
       ${rows}
     `;
+    container.innerHTML = html;
+    _lbCache = html;
+    _lbCacheAt = Date.now();
   } catch (e) {
     console.error("Leaderboard load failed:", e);
     container.innerHTML = '';
@@ -2459,6 +2513,8 @@ async function approveAdminUser(email) {
   const res = await upgradeToPaid(email, "manual-approve-" + Date.now());
   if (res.result === "success") {
     toast("✓ User upgraded to Paid");
+    // Invalidate leaderboard cache so it refreshes on next home view
+    _lbCache = null;
     setTimeout(openAdminDashboard, 400);
   } else {
     toast("Approval failed: " + (res.message || "unknown"), true);
@@ -2469,10 +2525,24 @@ async function approveAdminUser(email) {
    INIT — final
    ============================================================ */
 updateUserUI();
-refreshUserPlan();
+refreshUserPlan(true);
 
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden) refreshUserPlan();
+});
+
+// Click-outside-to-close for auth & upgrade modals
+document.getElementById("authModal").addEventListener("click", e => {
+  if (e.target.id === "authModal") closeAuthModal();
+});
+document.getElementById("upgradeModal").addEventListener("click", e => {
+  if (e.target.id === "upgradeModal") closeUpgradeModal();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape"){
+    if (document.getElementById("authModal").classList.contains("show")) closeAuthModal();
+    if (document.getElementById("upgradeModal").classList.contains("show")) closeUpgradeModal();
+  }
 });
 </script>
 
